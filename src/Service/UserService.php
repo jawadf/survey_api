@@ -45,7 +45,7 @@ class UserService
             $result[] = [
                 'Message' => 'Sorry! Invalid email or password'
             ];
-        }
+        } 
 
         echo json_encode($result);
     }
@@ -53,7 +53,6 @@ class UserService
 
     /**
      * Used for sign up
-     * 
      */
     public function registerMethod($email, $password)
     {
@@ -76,6 +75,7 @@ class UserService
                 $this->entityManager->flush();
 
                 $return = array('success' => 1);
+                
             }
 
             return $return;
@@ -87,4 +87,6 @@ class UserService
 
         echo json_encode($return);      
     }
+
+
 }

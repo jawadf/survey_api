@@ -14,12 +14,19 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        secured_area:
+        api_secured_area:
             anonymous: true
+            json_login:
+                check_path: /login
+                username_path: email
             guard:
                 authenticators:
                     - App\Security\TokenAuthenticator
             stateless: true
+            # logout:
+            #     path: app_logout
+                # where to redirect after logout
+                # target: app_any_route
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication

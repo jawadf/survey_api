@@ -27,8 +27,8 @@ class SurveyController extends FOSRestController
      */
     public function getUserSurveys(Request $request): View
     {
-        $id = $request->get('user_id');
-
+        $content = json_decode($request->getContent(), true);
+        $id = $content['user_id'];
         $checker = $this->checkerService->userChecker($id);
 
         $surveys= array();
@@ -45,17 +45,68 @@ class SurveyController extends FOSRestController
      */
     public function createNewSurvey(Request $request): View
     {
-        $name = $request->get('name');
-        $description = $request->get('description');
-        $format = $request->get('format');
+        $content = json_decode($request->getContent(), true);
+        $name = $content['name'];
+        $description = $content['description'];
+        $format = $content['format'];
+        $user_id = $content['user_id'];
 
-        $result = $this->surveyService->createSurvey($name, $description, $format);
-        
+        $checker = $this->checkerService->userChecker($user_id);
+
+        $result = array();
+        if ($checker['status']) {
+            $user = $checker['user'];
+            $result = $this->surveyService->createSurvey($name, $description, $format, $user);
+        }
+    
         return View::create($result, Response::HTTP_CREATED);
     }
     
     /**
-     * Edit
+     * @Rest\Put("/survey/edit")
      */
+    public function editSurvey(Request $request): View
+    {
+        $content = json_decode($request->getContent(), true);
+        $id = $content['id'];
+        $name = $content['name'];
+        $description = $content['description'];
+        $format = $content['format'];
+        $user_id = $content['user_id'];
+
+        $checker = $this->checkerService->userChecker($user_id);
+
+        $result = array();
+        if ($checker['status']) {
+            $user = $checker['user'];
+            $result = $this->surveyService->editSurvey($id, $name, $description, $format, $user);
+        }
+    
+        return View::create($result, Response::HTTP_CREATED);
+    }
+
+    /**
+     * @Rest\Get("/survey/show")
+     */
+    public function fetchOneSurvey(Request $request): View
+    {
+        $content = json_decode($request->getContent(), true);
+        $id = $content['id'];
+        $result = $this->surveyService->fetchSurvey($id);
+
+        return View::create($result, Response::HTTP_CREATED);
+    }
+
+    /**
+     * @Rest\Delete("/survey/delete")
+     */
+    public function deleteSurvey(Request $request): View
+    {
+        $content = json_decode($request->getContent(), true);
+        $id = $content['id'];
+        $result = $this->surveyService->deleteSurvey($id);
+
+        return View::create($result, Response::HTTP_CREATED);
+    }
    
 }

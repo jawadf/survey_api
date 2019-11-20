@@ -29,10 +29,12 @@ class QuestionController extends FOSRestController
      */
     public function createNewQuestion(Request $request): View
     {
-        $title = $request->get('title');
-        $survey_id = $request->get('survey_id');
-        $answer_type = $request->get('answer_type');
-        $answers = $request->get('answers');
+        $content = json_decode($request->getContent(), true);
+
+        $title = $content['title'];
+        $survey_id = $content['survey_id'];
+        $answer_type = $content['answer_type'];
+        $answers = $content['answers'];
 
         $checker = $this->checkerService->surveyChecker($survey_id);
 
@@ -50,7 +52,8 @@ class QuestionController extends FOSRestController
      */
     public function getSurveyQuestions(Request $request): View
     {
-        $id = $request->get('survey_id');
+        $content = json_decode($request->getContent(), true);
+        $id = $content['survey_id'];
 
         $checker = $this->checkerService->surveyChecker($id);
 
@@ -69,11 +72,13 @@ class QuestionController extends FOSRestController
      */
     public function editQuestion(Request $request): View
     {
-        $id= $request->get('question_id');
-        $title = $request->get('title');
-        $survey_id = $request->get('survey_id');
-        $answer_type = $request->get('answer_type');
-        $answers = $request->get('answers');
+        $content = json_decode($request->getContent(), true);
+
+        $id= $content['question_id'];
+        $title = $content['title'];
+        $survey_id = $content['survey_id'];
+        $answer_type = $content['answer_type'];
+        $answers = $content['answers'];
 
         $checker = $this->checkerService->surveyChecker($survey_id);
 
@@ -86,12 +91,13 @@ class QuestionController extends FOSRestController
         return View::create($result, Response::HTTP_CREATED);
     }
 
-    /**
+    /** 
      * @Rest\Get("/survey/question/show")
      */
     public function fetchOneQuestion(Request $request): View
     {
-        $id = $request->get('id');
+        $content = json_decode($request->getContent(), true);
+        $id= $content['id'];
         $result = $this->questionService->fetchQuestion($id);
 
         return View::create($result, Response::HTTP_CREATED);
@@ -102,7 +108,8 @@ class QuestionController extends FOSRestController
      */
     public function deleteQuestion(Request $request): View
     {
-        $id = $request->get('id');
+        $content = json_decode($request->getContent(), true);
+        $id= $content['id'];
         $result = $this->questionService->delete($id);
 
         return View::create($result, Response::HTTP_CREATED);

@@ -43,10 +43,16 @@ class Survey
      */
     private $user;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Branch", mappedBy="survey")
+     */
+    private $branches;
+
 
     public function __construct()
     {
         $this->questions = new ArrayCollection();
+        $this->branches = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -129,6 +135,34 @@ class Survey
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Branch[]
+     */
+    public function getBranches(): Collection
+    {
+        return $this->branches;
+    }
+
+    public function addBranch(Branch $branch): self
+    {
+        if (!$this->branches->contains($branch)) {
+            $this->branches[] = $branch;
+            $branch->addSurvey($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBranch(Branch $branch): self
+    {
+        if ($this->branches->contains($branch)) {
+            $this->branches->removeElement($branch);
+            $branch->removeSurvey($this);
+        }
 
         return $this;
     }

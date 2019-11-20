@@ -144,7 +144,7 @@ class QuestionService
 
         $return = array();
         if ($question) {
-            $this->entityManager->remove($question);
+            $this->entityManager->remove($question); 
             $this->entityManager->flush();
             $return[] = [
                 'success' => 1,

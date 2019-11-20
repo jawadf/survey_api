@@ -20,17 +20,20 @@ class UserController extends FOSRestController
     public function __construct(UserService $userService)
     {
         $this->userService = $userService;
-    }
+    }  
 
-    /**
-     * @Rest\Get("/login")
-     */ 
-    public function loginHandler(Request $request): View
+   /**
+     * @Rest\Post("/login")
+     */
+    public function login(Request $request): View
     {
-        $email = $request->get('email');
-        $password = $request->get('password');
-        
-        $result = $this->userService->loginMethod($email, $password);
+        // $content = json_decode($request->getContent(), true);
+        // $email = $content['email'];
+        // $password = $content['password'];
+
+        // $result = $this->userService->loginMethod($email, $password);
+
+        $result = ['success' => 1];
 
         return View::create($result, Response::HTTP_CREATED);
     }
@@ -41,8 +44,9 @@ class UserController extends FOSRestController
      */ 
     public function registerHandler(Request $request): View
     {
-        $email = $request->get('email');
-        $password = $request->get('password');
+        $content = json_decode($request->getContent(), true);
+        $email = $content['email'];
+        $password = $content['password'];
 
         $result = $this->userService->registerMethod($email, $password);
 
