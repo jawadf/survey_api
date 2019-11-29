@@ -44,11 +44,22 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="App\Entity\Survey", mappedBy="user")
      */
     private $surveys;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Branch", mappedBy="user")
+     */
+    private $branches;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $fullname;
     
 
     public function __construct()
     {
         $this->surveys = new ArrayCollection();
+        $this->branches = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -168,6 +179,49 @@ class User implements UserInterface
                 $survey->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Branch[]
+     */
+    public function getBranches(): Collection
+    {
+        return $this->branches;
+    }
+
+    public function addBranch(Branch $branch): self
+    {
+        if (!$this->branches->contains($branch)) {
+            $this->branches[] = $branch;
+            $branch->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBranch(Branch $branch): self
+    {
+        if ($this->branches->contains($branch)) {
+            $this->branches->removeElement($branch);
+            // set the owning side to null (unless already changed)
+            if ($branch->getUser() === $this) {
+                $branch->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getFullname(): ?string
+    {
+        return $this->fullname;
+    }
+
+    public function setFullname(string $fullname): self
+    {
+        $this->fullname = $fullname;
 
         return $this;
     }

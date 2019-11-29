@@ -14,6 +14,17 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        admin_secured_area:
+            anonymous: true
+            pattern: ^/admin
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+        main:
+            anonymous: true
+            logout:
+                path: app_logout
+                target: app_login
         api_secured_area:
             anonymous: true
             json_login:
@@ -23,11 +34,7 @@ security:
                 authenticators:
                     - App\Security\TokenAuthenticator
             stateless: true
-            # logout:
-            #     path: app_logout
-                # where to redirect after logout
-                # target: app_any_route
-
+            
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
 
@@ -37,7 +44,9 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/question|survey, roles: ROLE_USER }
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/question|survey, roles: ROLE_USER }
+       # - { path: ^/login|register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        

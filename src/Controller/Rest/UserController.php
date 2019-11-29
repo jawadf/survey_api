@@ -37,7 +37,7 @@ class UserController extends FOSRestController
 
         return View::create($result, Response::HTTP_CREATED);
     }
-
+ 
 
     /**
      * @Rest\Post("/register")

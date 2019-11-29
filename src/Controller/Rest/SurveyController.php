@@ -2,6 +2,8 @@
 
 namespace App\Controller\Rest;
 
+use App\Entity\Survey;
+use App\Form\Type\SurveyType;
 use App\Service\SurveyService;
 use App\Service\CheckerService;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,7 +15,7 @@ use FOS\RestBundle\View\View;
 class SurveyController extends FOSRestController
 {
     private $surveyService;
-
+    
     private $checkerService;
 
     public function __construct(SurveyService $surveyService, CheckerService $checkerService)
@@ -41,7 +43,7 @@ class SurveyController extends FOSRestController
     }
 
     /**
-     * @Rest\Post("/survey")
+     * @Rest\Post("/api/survey/create")
      */
     public function createNewSurvey(Request $request): View
     {
@@ -50,7 +52,7 @@ class SurveyController extends FOSRestController
         $description = $content['description'];
         $format = $content['format'];
         $user_id = $content['user_id'];
-
+ 
         $checker = $this->checkerService->userChecker($user_id);
 
         $result = array();
@@ -61,6 +63,37 @@ class SurveyController extends FOSRestController
     
         return View::create($result, Response::HTTP_CREATED);
     }
+
+
+    // /**
+    //  * @Rest\Post("/api/survey/create")
+    //  */
+    // public function createNewSurvey(Request $request): View
+    // {
+
+    //     $survey = new Survey();
+
+    //     $form = $this->createForm(SurveyType::class, $survey);
+
+
+    //     $result = ['success' => 0];
+    //     $form->handleRequest($request);
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         // $form->getData() holds the submitted values
+    //         // but, the original `$task` variable has also been updated
+    //         $survey = $form->getData();
+
+    //         // ... perform some action, such as saving the task to the database
+    //         // for example, if Task is a Doctrine entity, save it!
+    //          $entityManager = $this->getDoctrine()->getManager();
+    //          $entityManager->persist($survey);
+    //          $entityManager->flush();
+
+    //          $result = ['success' => 1];
+    //     }
+    
+    //     return View::create($result, Response::HTTP_CREATED);
+    // }
     
     /**
      * @Rest\Put("/survey/edit")
@@ -86,7 +119,7 @@ class SurveyController extends FOSRestController
     }
 
     /**
-     * @Rest\Get("/survey/show")
+     * @Rest\Get("api/survey/show")
      */
     public function fetchOneSurvey(Request $request): View
     {
@@ -95,7 +128,7 @@ class SurveyController extends FOSRestController
         $result = $this->surveyService->fetchSurvey($id);
 
         return View::create($result, Response::HTTP_CREATED);
-    }
+    } 
 
     /**
      * @Rest\Delete("/survey/delete")
@@ -108,5 +141,23 @@ class SurveyController extends FOSRestController
 
         return View::create($result, Response::HTTP_CREATED);
     }
+
+    // /**
+    //  * @Rest\Get("/survey/get_branch_surveys")
+    //  */
+    // public function getBranchSurveys(Request $request): View
+    // {
+    //     $content = json_decode($request->getContent(), true);
+    //     $id = $content['branch_id'];
+    //     $checker = $this->checkerService->branchChecker($id);
+
+    //     $surveys= array();
+    //     if ($checker['status']) {
+    //         $branch = $checker['branch'];
+    //         $surveys = $this->surveyService->getBranchSurveys($branch);
+    //     }
+
+    //     return View::create($surveys, Response::HTTP_CREATED);
+    // }
    
 }

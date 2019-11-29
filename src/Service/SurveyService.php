@@ -11,12 +11,12 @@ class SurveyService
 {
     private $surveyRepository;
     private $entityManager;
-
+ 
     public function __construct(EntityManagerInterface $entityManager) 
     {
         $this->surveyRepository = $entityManager->getRepository(Survey::class);
         $this->entityManager = $entityManager;
-    }
+    } 
 
     /**
      * CREATE SURVEY
@@ -59,28 +59,80 @@ class SurveyService
     }
 
     /**
-     * GET ALL THE SURVEYS OF A SPECIFIC USER
+     * GET ALL THE SURVEYS OF ALL USERS
      */
-    public function getUserSurveys($user)
+    public function getAllSurveys()
     { 
-
-        $result = $this->surveyRepository->findBy(
-            ['user' => $user]
-        );
+        $result = $this->surveyRepository->findAll();
 
         $surveys = array();
         foreach ($result as $oneSurvey) {
+
+            $questions = $oneSurvey->getQuestions();
             $surveys[] = [
                'id' => $oneSurvey->getId(),
                'name' => $oneSurvey->getName(),
                'description' => $oneSurvey->getDescription(),
                'format' => $oneSurvey->getFormat(),
                'user_id' => $oneSurvey->getUser()->getId(),
+               'questions' => sizeof($questions)
             ];
         }
 
-        echo json_encode($surveys);
+        return json_encode($surveys);
     }
+
+
+    /**
+     * GET ALL THE SURVEYS OF A SPECIFIC USER
+     */
+    public function getUserSurveys($user)
+    { 
+        $result = $this->surveyRepository->findBy(
+            ['user' => $user]
+        );
+
+        $surveys = array();
+        foreach ($result as $oneSurvey) {
+
+            $questions = $oneSurvey->getQuestions();
+            $surveys[] = [
+               'id' => $oneSurvey->getId(),
+               'name' => $oneSurvey->getName(),
+               'description' => $oneSurvey->getDescription(),
+               'format' => $oneSurvey->getFormat(),
+               'user_id' => $oneSurvey->getUser()->getId(),
+               'questions' => sizeof($questions)
+            ];
+        }
+
+        dump($surveys);
+
+        return json_encode($surveys);
+    }
+
+    // /**
+    //  * GET ALL THE SURVEYS OF A SPECIFIC BRANCH
+    //  */
+    // public function getBranchSurveys($branch)
+    // { 
+
+    //     $result = $this->surveyRepository->findBy(
+    //         ['branches' => $branch]
+    //     );
+
+    //     $surveys = array();
+    //     foreach ($result as $oneSurvey) {
+    //         $surveys[] = [
+    //            'id' => $oneSurvey->getId(),
+    //            'name' => $oneSurvey->getName(),
+    //            'description' => $oneSurvey->getDescription(),
+    //            'format' => $oneSurvey->getFormat()
+    //         ];
+    //     }
+
+    //     echo json_encode($surveys);
+    // }
 
 
     /**

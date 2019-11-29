@@ -29,7 +29,7 @@ class Survey
     private $description;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Question", mappedBy="survey")
+     * @ORM\OneToMany(targetEntity="App\Entity\Question", mappedBy="survey", cascade="persist")
      */
     private $questions;
 
@@ -61,8 +61,8 @@ class Survey
     }
 
     public function getName(): ?string
-    {
-        return $this->name;
+    { 
+        return $this->name; 
     }
 
     public function setName(string $name): self
@@ -75,7 +75,7 @@ class Survey
     public function getDescription(): ?string
     {
         return $this->description;
-    }
+    } 
 
     public function setDescription(?string $description): self
     {

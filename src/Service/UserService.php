@@ -23,19 +23,53 @@ class UserService
     }
 
     /**
+     * Get User Object
+     */
+    public function getUserObject(int $id)
+    { 
+        $user = $this->usersRepository->findOneBy([
+            'id' => $id
+        ]);
+
+        return $user;
+    }
+
+
+    /**
+     * Fetch a list of all users
+     */
+    public function getAllUsers()
+    { 
+        $result = $this->usersRepository->findAll();
+
+        $users = array();
+        foreach ($result as $oneUser) {
+
+            $users[] = [
+               'id' => $oneUser->getId(),
+               'email' => $oneUser->getEmail(),
+               'fullname' => $oneUser->getFullname(),
+            ];
+        }
+
+        return $users;
+    }
+
+
+    /**
      * Check for email and password, return Token
      * 
      */
     public function loginMethod($email, $password)
     {
         $user = $this->usersRepository->findOneBy([
-            'email' => $email
+            'email' => $email 
         ]);
         $isPasswordValid = $this->passwordEncoder->isPasswordValid($user, $password);
         
         $result = array();
         if($isPasswordValid) {
-            $result[] = [
+            $result[] = [ 
                 'Message' => 'success',
                 'email' => $user->getEmail(),
                 'token' => $user->getToken(),
@@ -63,19 +97,19 @@ class UserService
                 'email' => $email
             ]);
 
-            if($userExists) {
+            if($userExists) { 
                 $return = array('message' => 'User already exists');
             } else {
                 $user = new User();
                 $user->setEmail($email);
                 $user->setPassword($this->passwordEncoder->encodePassword( $user, $password ));
                 $user->setToken(md5(uniqid(rand(), true)));
+                $user->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
 
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
 
-                $return = array('success' => 1);
-                
+                $return = array('success' => 1);   
             }
 
             return $return;

@@ -1,0 +1,85 @@
+{% extends "admin/base.html.twig" %}
+
+{% block assets_path %}../../../{% endblock %}
+{% block dashboard_active %}{% endblock %}
+{% block surveys_active %}kt-menu__item--active{% endblock %}
+{% block users_active %}{% endblock %}
+{% block subheader_title %}{% endblock %} 
+{% block page_scripts %}<script src="./assets/js/demo7/pages/crud/metronic-datatable/base/data-local.js" type="text/javascript"></script>{% endblock %}  
+
+
+{% block content %} 
+
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+	<!--begin::Back Button-->
+	<a href="{{ path('admin_surveys') }}" class="btn btn-clean btn-icon-sm">
+		<i class="la la-long-arrow-left"></i>
+		Back
+	</a>
+	<!--end::Back Button-->
+	<div class="row">
+	    <div class="col-md-6">
+		<!--begin::Portlet-->
+		<div class="kt-portlet huge-form">
+			<div class="kt-portlet__head">
+				<div class="kt-portlet__head-label">
+					<h3 class="kt-portlet__head-title">
+						Create a new survey
+					</h3>
+				</div>
+			</div>
+			<!--begin::Form-->
+			<form class="kt-form " method="post">
+				 <div class="kt-portlet__body">
+                    {{ form_start(form) }}
+                    <div class="form-group">
+                        <label class="class-for-label">Name</label>
+                        {{ form_widget(form.name) }}
+					</div>
+                    <div class="form-group">
+                        <label>Description</label>
+						{{ form_widget(form.description) }}
+					</div>
+                    <div class="form-group">
+                        <label>Format</label>
+						{{ form_widget(form.format) }}
+					</div>
+                    <div class="form-group">
+                        <label>User ID</label>
+						{{ form_widget(form.user) }}
+						<span class="form-text text-muted">Lorem ipsum dolor amet sit eta.</span>
+					</div>
+
+                    {# <div class="form-group">
+                        <label>Add Questions</label>
+						{{ form_widget(form.questions) }}
+					</div> #}
+					<div class="form-group">
+						<ul class="questions"   data-prototype="{{ form_widget(form.questions.vars.prototype)|e('html_attr') }}">
+						{% for questionField in form.questions %}
+								<li class="form-group ">
+								{{ form_errors(questionField) }}
+								{{ form_widget(questionField) }}
+								</li>
+						{% endfor %}
+						</ul>
+					</div>
+
+				</div>
+				<div class="kt-portlet__foot">
+					<div class="kt-form__actions">					
+						 <button type="submit" class="btn btn-primary">Submit</button> 
+						<button type="reset" class="btn btn-secondary">Cancel</button>
+					</div>
+				</div>
+				{{ form_end(form) }}
+			</form>
+			<!--end::Form-->			
+		</div>
+		<!--end::Portlet-->
+	    </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -74,7 +74,7 @@ class QuestionService
     }
 
     /**
-     * EDIT CONTENT OF A QUESTION
+     * EDIT CONTENT OF A QUESTION 
      */
     public function edit(int $id, string $title, Survey $survey, string $answer_type, string $answersString)
     {
@@ -104,13 +104,13 @@ class QuestionService
                     'message' => 'Error: could not edit question! Please specify all the required fields'
                 ];
             }
-
         }
+        
         return $return;
     }
 
     /**
-     * GET ONE QUESTION
+     * GET ONE QUESTION 
      */
     public function fetchQuestion($id)
     {
@@ -136,7 +136,7 @@ class QuestionService
 
 
     /**
-     * DELETE QUESTION
+     * DELETE QUESTION 
      */
     public function delete($id)
     {

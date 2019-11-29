@@ -91,7 +91,7 @@ class QuestionController extends FOSRestController
         return View::create($result, Response::HTTP_CREATED);
     }
 
-    /** 
+    /**
      * @Rest\Get("/survey/question/show")
      */
     public function fetchOneQuestion(Request $request): View
@@ -103,7 +103,7 @@ class QuestionController extends FOSRestController
         return View::create($result, Response::HTTP_CREATED);
     }
 
-    /**
+    /** 
      * @Rest\Delete("/survey/question/delete")
      */
     public function deleteQuestion(Request $request): View
