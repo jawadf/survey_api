@@ -71,6 +71,7 @@ class SurveyService
             $questions = $oneSurvey->getQuestions();
             $surveys[] = [
                'id' => $oneSurvey->getId(),
+               'url' => '',
                'name' => $oneSurvey->getName(),
                'description' => $oneSurvey->getDescription(),
                'format' => $oneSurvey->getFormat(),

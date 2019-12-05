@@ -22,3 +22,8 @@
     border-color: transparent;
     border-image: initial;
 }
+
+
+.empty-margin {
+    margin: 23px 0;
+}

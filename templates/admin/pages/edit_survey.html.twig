@@ -1,6 +1,6 @@
 {% extends "admin/base.html.twig" %}
 
-{% block assets_path %}../../../{% endblock %}
+{% block assets_path %}../../../../{% endblock %}
 {% block dashboard_active %}{% endblock %}
 {% block surveys_active %}kt-menu__item--active{% endblock %}
 {% block users_active %}{% endblock %}
@@ -55,19 +55,19 @@
 						{% for questionField in form.questions %}
 								<li>
 									{{ form_errors(questionField) }}
-							
-									{{ form_widget(questionField.title) }}
-
-									{{ form_widget(questionField.answer_type) }}
 									
-									{{ form_widget(questionField.answers) }}
+									{# Input 1 #}
+									{{ form_row(questionField.title) }}
+
+									{# Input 2 #}
+									{{ form_row(questionField.answer_type) }}
 
 									{# UL #}
-									 {# <ul class="form-group answers-area"  data-prototype="{{ form_widget(questionField.answers.vars.prototype)|e('html_attr') }}">
+									<ul class="form-group answers-area"  data-prototype="{{ form_widget(questionField.answers.vars.prototype)|e('html_attr') }}">
 										{% for answer in questionField.answers %}
-											{{ form_widget(answer) }}
+										<li>	{{ form_widget(answer) }}<li>
 										{% endfor %}
-									</ul>   #}
+									</ul> 
 								</li>
 							
 						{% endfor %}

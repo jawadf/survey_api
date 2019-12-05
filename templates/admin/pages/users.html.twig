@@ -1,89 +1,518 @@
-{% extends "admin/base.html.twig" %}
+{% extends "admin/base.html.twig" %} 
 
-
-{% block assets_path %}../../{% endblock %}
-{% block dashboard_active %}{% endblock %}
-{% block surveys_active %}{% endblock %}
-{% block users_active %}kt-menu__item--active{% endblock %}
-{% block subheader_title %}Manage Users{% endblock %}  
-
+{% block assets_path %}../../{% endblock %} 
+{% block dashboard_active %}{% endblock %} 
+{% block surveys_active %}{% endblock %} 
+{% block users_active %}kt-menu__item--active{% endblock %} 
+{% block subheader_title %}Manage Users{% endblock %} 
 
 {% block content %}
 
+<!-- begin:: Content -->
+<div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
 
+    <!--Begin:: Add User-->
+    <a href="{{ path('admin_create_user') }}" class="btn btn-brand btn-icon-sm" style="color: white"  aria-haspopup="true" aria-expanded="false">
+        <i class="flaticon2-plus"></i> Add New User
+    </a>
+    <!--end: Add User-->
+              
+    <!--Begin::Section-->
+    <div class="row">
+        <div class="col-xl-12">
+            <!--begin:: Components/Pagination/Default-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__body">
+                    <!--begin: Pagination-->
+                    <div class="kt-pagination kt-pagination--brand">
+                        <ul class="kt-pagination__links">
+                            <li class="kt-pagination__link--first">
+                                <a href="#"><i class="fa fa-angle-double-left kt-font-brand"></i></a>
+                            </li>
+                            <li class="kt-pagination__link--next">
+                                <a href="#"><i class="fa fa-angle-left kt-font-brand"></i></a>
+                            </li>
 
-<div class="col-xl-8 col-lg-12 order-lg-1 order-xl-1">
-<a href="#" class="btn btn-sm btn-label-brand btn-bold">Add User</a>
-		<div class="kt-portlet kt-portlet--height-fluid kt-portlet--mobile ">
-	<div class="kt-portlet__head kt-portlet__head--lg kt-portlet__head--noborder kt-portlet__head--break-sm">
-		<div class="kt-portlet__head-label">
-			<h3 class="kt-portlet__head-title">
-				Exclusive Datatable Plugin
-			</h3>
-		</div>
-		<div class="kt-portlet__head-toolbar">
-			<div class="dropdown dropdown-inline">
-				<button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<i class="flaticon-more-1"></i>
-				</button>
-				<div class="dropdown-menu dropdown-menu-right dropdown-menu-md dropdown-menu-fit">
-                    <!--begin::Nav-->
-<ul class="kt-nav">
-    <li class="kt-nav__head">
-        Export Options                                    
-        <span data-toggle="kt-tooltip" data-placement="right" title="Click to learn more...">
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1" class="kt-svg-icon kt-svg-icon--brand kt-svg-icon--md1">
-    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <rect x="0" y="0" width="24" height="24"/>
-        <circle fill="#000000" opacity="0.3" cx="12" cy="12" r="10"/>
-        <rect fill="#000000" x="11" y="10" width="2" height="7" rx="1"/>
-        <rect fill="#000000" x="11" y="7" width="2" height="2" rx="1"/>
-    </g>
-</svg>        </span>
-   </li>
-    <li class="kt-nav__separator"></li>
-    <li class="kt-nav__item">
-        <a href="#" class="kt-nav__link">
-            <i class="kt-nav__link-icon flaticon2-drop"></i>
-            <span class="kt-nav__link-text">Activity</span>
-        </a>
-    </li>
-    <li class="kt-nav__item">
-        <a href="#" class="kt-nav__link">
-            <i class="kt-nav__link-icon flaticon2-calendar-8"></i>
-            <span class="kt-nav__link-text">FAQ</span>
-        </a>
-    </li>
-    <li class="kt-nav__item">
-        <a href="#" class="kt-nav__link">
-            <i class="kt-nav__link-icon flaticon2-telegram-logo"></i>
-            <span class="kt-nav__link-text">Settings</span>
-        </a>
-    </li>
-    <li class="kt-nav__item">
-        <a href="#" class="kt-nav__link">
-            <i class="kt-nav__link-icon flaticon2-new-email"></i>
-            <span class="kt-nav__link-text">Support</span>
-            <span class="kt-nav__link-badge">
-                <span class="kt-badge kt-badge--success kt-badge--rounded">5</span>
-            </span>
-        </a>
-    </li>
-    <li class="kt-nav__separator"></li>
-    <li class="kt-nav__foot">
-        <a class="btn btn-label-danger btn-bold btn-sm" href="#">Upgrade plan</a>                                    
-        <a class="btn btn-clean btn-bold btn-sm" href="#" data-toggle="kt-tooltip" data-placement="right" title="Click to learn more...">Learn more</a>
-    </li>
-</ul>
-<!--end::Nav-->				</div>
-			</div>
-		</div>
-	</div>
-	<div class="kt-portlet__body kt-portlet__body--fit">
-		<!--begin: Datatable -->
-		<div class="kt-datatable" id="kt_datatable_latest_orders"></div>
-		<!--end: Datatable -->
-	</div>
-</div>	</div>
+                            <li>
+                                <a href="#">...</a>
+                            </li>
+                            <li>
+                                <a href="#">29</a>
+                            </li>
+                            <li>
+                                <a href="#">30</a>
+                            </li>
+                            <li class="kt-pagination__link--active">
+                                <a href="#">31</a>
+                            </li>
+                            <li>
+                                <a href="#">32</a>
+                            </li>
+                            <li>
+                                <a href="#">33</a>
+                            </li>
+                            <li>
+                                <a href="#">34</a>
+                            </li>
+                            <li>
+                                <a href="#">...</a>
+                            </li>
+
+                            <li class="kt-pagination__link--prev">
+                                <a href="#"><i class="fa fa-angle-right kt-font-brand"></i></a>
+                            </li>
+                            <li class="kt-pagination__link--last">
+                                <a href="#"><i class="fa fa-angle-double-right kt-font-brand"></i></a>
+                            </li>
+                        </ul>
+
+                        <div class="kt-pagination__toolbar">
+                            <select class="form-control kt-font-brand" style="width: 60px">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <span class="pagination__desc">
+                    Displaying 10 of 230 records
+                </span>
+                        </div>
+                    </div>
+                    <!--end: Pagination-->
+                </div>
+            </div>
+            <!--end:: Components/Pagination/Default-->
+        </div>
+    </div>
+    <!--End::Section-->
+
+    <!--Begin::Section-->
+    <div class="row">
+
+    {% for user in all_users %}
+
+        <div class="col-xl-3">
+            <div class="kt-portlet kt-portlet--height-fluid">
+                <div class="kt-portlet__head kt-portlet__head--noborder">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+
+                    </h3>
+                    </div>
+                    <div class="kt-portlet__head-toolbar">
+                        <a href="#" class="btn btn-clean btn-icon" data-toggle="dropdown">
+                            <i class="flaticon-more-1"></i>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <ul class="kt-nav">
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-line-chart"></i>
+                                        <span class="kt-nav__link-text">Reports</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-send"></i>
+                                        <span class="kt-nav__link-text">Messages</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-pie-chart-1"></i>
+                                        <span class="kt-nav__link-text">Charts</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-avatar"></i>
+                                        <span class="kt-nav__link-text">Members</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-settings"></i>
+                                        <span class="kt-nav__link-text">Settings</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="kt-portlet__body kt-portlet__body--fit-y">
+                    <!--begin::Widget -->
+                    <div class="kt-widget kt-widget--user-profile-4">
+                        <div class="kt-widget__head">
+                            <div class="kt-widget__media">
+                                <img class="kt-widget__img kt-hidden-" src="./assets/media/users/default.jpg" alt="image">
+                                <div class="kt-widget__pic kt-widget__pic--danger kt-font-danger kt-font-boldest kt-hidden">
+                                    CR
+                                </div>
+                            </div>
+                            <div class="kt-widget__content">
+                                <div class="kt-widget__section">
+                                    <a href="#" class="kt-widget__username">                                 
+                                    {{ user.fullname }}                                                           
+                                    </a>
+
+                                    <div class="kt-widget__action">
+                                        <a href="{{ path('admin_edit_user') }}">
+                                            <button type="button" class="btn btn-brand btn-pill">
+                                                <i class="la la-edit"></i>  Customize
+                                            </button>
+                                        </a>
+                                            
+                                    </div>
+                                    <div class="empty-margin">
+                                        &nbsp;
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Widget -->
+                </div>
+            </div>
+        </div>
+
+     {% endfor %}
+
+        {# <div class="col-xl-3">
+            <div class="kt-portlet kt-portlet--height-fluid">
+                <div class="kt-portlet__head kt-portlet__head--noborder">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+
+                    </h3>
+                    </div>
+                    <div class="kt-portlet__head-toolbar">
+                        <a href="#" class="btn btn-clean btn-icon" data-toggle="dropdown">
+                            <i class="flaticon-more-1"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <ul class="kt-nav">
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-line-chart"></i>
+                                        <span class="kt-nav__link-text">Reports</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-send"></i>
+                                        <span class="kt-nav__link-text">Messages</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-pie-chart-1"></i>
+                                        <span class="kt-nav__link-text">Charts</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-avatar"></i>
+                                        <span class="kt-nav__link-text">Members</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-settings"></i>
+                                        <span class="kt-nav__link-text">Settings</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="kt-portlet__body kt-portlet__body--fit-y kt-margin-b-40">
+                    <!--begin::Widget -->
+                    <div class="kt-widget kt-widget--user-profile-4">
+                        <div class="kt-widget__head">
+                            <div class="kt-widget__media">
+                                <img class="kt-widget__img kt-hidden" src="./assets/media/users/300_21.jpg" alt="image">
+                                <div class="kt-widget__pic kt-widget__pic--success kt-font-success kt-font-boldest kt-hidden-">
+                                    MH
+                                </div>
+                            </div>
+                            <div class="kt-widget__content">
+                                <div class="kt-widget__section">
+                                    <a href="#" class="kt-widget__username">                                    
+                                    Megan Higgins                                                              
+                                </a>
+
+                                    <div class="kt-widget__button">
+                                        <span class="btn btn-label-danger btn-sm">Rejected</span>
+                                    </div>
+
+                                    <div class="kt-widget__action">
+                                        <a href="#" class="btn btn-icon btn-circle btn-label-facebook">
+                                            <i class="socicon-facebook"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-icon btn-circle btn-label-twitter">
+                                            <i class="socicon-twitter"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-icon btn-circle btn-label-linkedin">
+                                            <i class="socicon-linkedin"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Widget -->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3">
+            <div class="kt-portlet kt-portlet--height-fluid">
+                <div class="kt-portlet__head kt-portlet__head--noborder">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+
+                    </h3>
+                    </div>
+                    <div class="kt-portlet__head-toolbar">
+                        <a href="#" class="btn btn-clean btn-icon" data-toggle="dropdown">
+                            <i class="flaticon-more-1"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <ul class="kt-nav">
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-line-chart"></i>
+                                        <span class="kt-nav__link-text">Reports</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-send"></i>
+                                        <span class="kt-nav__link-text">Messages</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-pie-chart-1"></i>
+                                        <span class="kt-nav__link-text">Charts</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-avatar"></i>
+                                        <span class="kt-nav__link-text">Members</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-settings"></i>
+                                        <span class="kt-nav__link-text">Settings</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="kt-portlet__body kt-portlet__body--fit-y kt-margin-b-40">
+                    <!--begin::Widget -->
+                    <div class="kt-widget kt-widget--user-profile-4">
+                        <div class="kt-widget__head">
+                            <div class="kt-widget__media">
+                                <img class="kt-widget__img kt-hidden-" src="./assets/media/users/300_4.jpg" alt="image">
+                                <div class="kt-widget__pic kt-widget__pic--danger kt-font-danger kt-font-boldest kt-hidden">
+                                    LD
+                                </div>
+                            </div>
+                            <div class="kt-widget__content">
+                                <div class="kt-widget__section">
+                                    <a href="#" class="kt-widget__username">                                    
+                                    Luke Davids                                                       
+                                </a>
+                                    <div class="kt-widget__button">
+                                        <span class="btn btn-label-success btn-sm">Active</span>
+                                    </div>
+
+                                    <div class="kt-widget__action">
+                                        <a href="#" class="btn btn-icon btn-circle btn-label-facebook">
+                                            <i class="socicon-facebook"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-icon btn-circle btn-label-twitter">
+                                            <i class="socicon-twitter"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-icon btn-circle btn-label-linkedin">
+                                            <i class="socicon-linkedin"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Widget -->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3">
+            <div class="kt-portlet kt-portlet--height-fluid">
+                <div class="kt-portlet__head kt-portlet__head--noborder">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+
+                    </h3>
+                    </div>
+                    <div class="kt-portlet__head-toolbar">
+                        <a href="#" class="btn btn-clean btn-icon" data-toggle="dropdown">
+                            <i class="flaticon-more-1"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <ul class="kt-nav">
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-line-chart"></i>
+                                        <span class="kt-nav__link-text">Reports</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-send"></i>
+                                        <span class="kt-nav__link-text">Messages</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-pie-chart-1"></i>
+                                        <span class="kt-nav__link-text">Charts</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-avatar"></i>
+                                        <span class="kt-nav__link-text">Members</span>
+                                    </a>
+                                </li>
+                                <li class="kt-nav__item">
+                                    <a href="#" class="kt-nav__link">
+                                        <i class="kt-nav__link-icon flaticon2-settings"></i>
+                                        <span class="kt-nav__link-text">Settings</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="kt-portlet__body kt-portlet__body--fit-y kt-margin-b-40">
+                    <!--begin::Widget -->
+                    <div class="kt-widget kt-widget--user-profile-4">
+                        <div class="kt-widget__head">
+                            <div class="kt-widget__media">
+                                <img class="kt-widget__img kt-hidden-" src="./assets/media/users/300_5.jpg" alt="image">
+                                <div class="kt-widget__pic kt-widget__pic--danger kt-font-danger kt-font-boldest kt-hidden">
+                                    CM
+                                </div>
+                            </div>
+                            <div class="kt-widget__content">
+                                <div class="kt-widget__section">
+                                    <a href="#" class="kt-widget__username">                                    
+                                    Cody Morgan                                                             
+                                </a>
+                                    <div class="kt-widget__button">
+                                        <span class="btn btn-label-brand btn-sm">Active</span>
+                                    </div>
+
+                                    <div class="kt-widget__action">
+                                        <a href="#" class="btn btn-icon btn-circle btn-label-facebook">
+                                            <i class="socicon-facebook"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-icon btn-circle btn-label-twitter">
+                                            <i class="socicon-twitter"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-icon btn-circle btn-label-linkedin">
+                                            <i class="socicon-linkedin"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Widget -->
+                </div>
+            </div>
+        </div> #}
+    </div>
+    <!--End::Section-->
+
+     <!--Begin::Section-->
+    <div class="row">
+        <div class="col-xl-12">
+            <!--begin:: Components/Pagination/Default-->
+            <div class="kt-portlet">
+                <div class="kt-portlet__body">
+                    <!--begin: Pagination-->
+                    <div class="kt-pagination kt-pagination--brand">
+                        <ul class="kt-pagination__links">
+                            <li class="kt-pagination__link--first">
+                                <a href="#"><i class="fa fa-angle-double-left kt-font-brand"></i></a>
+                            </li>
+                            <li class="kt-pagination__link--next">
+                                <a href="#"><i class="fa fa-angle-left kt-font-brand"></i></a>
+                            </li>
+
+                            <li>
+                                <a href="#">...</a>
+                            </li>
+                            <li>
+                                <a href="#">29</a>
+                            </li>
+                            <li>
+                                <a href="#">30</a>
+                            </li>
+                            <li class="kt-pagination__link--active">
+                                <a href="#">31</a>
+                            </li>
+                            <li>
+                                <a href="#">32</a>
+                            </li>
+                            <li>
+                                <a href="#">33</a>
+                            </li>
+                            <li>
+                                <a href="#">34</a>
+                            </li>
+                            <li>
+                                <a href="#">...</a>
+                            </li>
+
+                            <li class="kt-pagination__link--prev">
+                                <a href="#"><i class="fa fa-angle-right kt-font-brand"></i></a>
+                            </li>
+                            <li class="kt-pagination__link--last">
+                                <a href="#"><i class="fa fa-angle-double-right kt-font-brand"></i></a>
+                            </li>
+                        </ul>
+
+                        <div class="kt-pagination__toolbar">
+                            <select class="form-control kt-font-brand" style="width: 60px">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <span class="pagination__desc">
+                    Displaying 10 of 230 records
+                </span>
+                        </div>
+                    </div>
+                    <!--end: Pagination-->
+                </div>
+            </div>
+            <!--end:: Components/Pagination/Default-->
+        </div>
+    </div>
+    <!--End::Section-->
+</div>
 
 {% endblock %}

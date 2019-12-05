@@ -60,3 +60,27 @@ class QuestionType extends AbstractType
         ]);
     }
 }
+
+
+/***
+ * 
+ * 
+ * 
+ * 	<div class="form-group">
+						<ul class="questions"   data-prototype="{{ form_widget(form.questions.vars.prototype)|e('html_attr') }}">
+						{% for questionField in form.questions %}
+								
+								{{ form_errors(questionField) }}
+								{{ form_row(questionField.title) }}
+								{{ form_row(questionField.answer_type) }}
+								 <ul class="form-group answers-area"  data-prototype="{{ form_widget(questionField.answers.vars.prototype)|e('html_attr') }}">
+								{% for answer in questionField.answers %}
+									{{ form_row(answer) }}
+								{% endfor %}
+								</ul> 
+							
+						{% endfor %}
+						</ul>
+					</div>
+
+ */
