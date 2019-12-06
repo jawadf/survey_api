@@ -27,9 +27,10 @@ jQuery(document).ready(function() {
     // index when inserting a new item (e.g. 2)
     $collectionHolder.data('index', $collectionHolder.find(':input').length);
 
+    // Add answer feature
     $collectionHolder2 = $('.answers-list');
     $collectionHolder2.append($addAnswerDiv);
-   $collectionHolder2.data('index', $collectionHolder2.find(':input').length);
+    $collectionHolder2.data('index', $collectionHolder2.find(':input').length);
     $collectionHolder2.find('li').each(function() {
         addTagFormDeleteLink($(this));
     });
@@ -38,7 +39,6 @@ jQuery(document).ready(function() {
     $addQuestionButton.on('click', function(e) {
         // add a new Question form 
         addQuestionForm($collectionHolder, $addQuestionDiv);
-
         
     });
 
@@ -78,13 +78,6 @@ function addQuestionForm($collectionHolder, $addQuestionDiv) {
     // increase the index with one for the next item
     $collectionHolder.data('index', index + 1);
 
-    // Display the form in the page in an li, before the "Add an image" link li
-    
-    /**
-     * NOTE: try to access an inner div and then append,
-     *       because we need to recreate the same as the first form 
-     */
-
     var $newFormLi = $('<li></li>').append(newForm);
     $addQuestionDiv.before($newFormLi);
 
@@ -92,7 +85,7 @@ function addQuestionForm($collectionHolder, $addQuestionDiv) {
     // add a delete link to the new form
     addTagFormDeleteLink($newFormLi);
 
-
+    // Add answer feature
     /******************************************************************************/
     $collectionHolder2 = $('.answers-list');
      var prototype2 = $collectionHolder2.data('prototype');

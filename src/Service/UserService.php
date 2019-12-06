@@ -82,6 +82,7 @@ class UserService
         } 
 
         echo json_encode($result);
+        
     }
 
 
@@ -104,7 +105,7 @@ class UserService
                 $user->setEmail($email);
                 $user->setPassword($this->passwordEncoder->encodePassword( $user, $password ));
                 $user->setToken(md5(uniqid(rand(), true)));
-                $user->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
+                $user->setRoles(['ROLE_USER']);
 
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();

@@ -29,7 +29,7 @@ class UserController extends FOSRestController
     {
         // $content = json_decode($request->getContent(), true);
         // $email = $content['email'];
-        // $password = $content['password'];
+        // $password = $content['password']; 
 
         // $result = $this->userService->loginMethod($email, $password);
 

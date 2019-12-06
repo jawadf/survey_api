@@ -4,14 +4,19 @@ namespace App\Controller\Web;
 
 use App\Entity\Survey;
 use App\Entity\Question;
+use App\Entity\User;
 use App\Service\SurveyService;
 use App\Service\UserService;
 use App\Form\Type\SurveyType;
 use App\Form\Type\DeleteType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Form\RegistrationFormType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Security\LoginFormAuthenticator;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 class AdminController extends AbstractController
 {
@@ -204,38 +209,76 @@ class AdminController extends AbstractController
     }
 
 
-    /**
-      * @Route("/admin/user/create", name="admin_create_user")
-      */
-      public function addUser(Request $request)
-      {
-          // $survey = new Survey();
+    // /**
+    //   * @Route("/admin/user/create", name="admin_create_user")
+    //   */
+    //   public function addUser(Request $request)
+    //   {
+    //       $survey = new Survey();
   
-          // $newQuestion = new Question();
-          // $newQuestion->setSurvey($survey);
-          // $survey->getQuestions()->add($newQuestion);
   
-          // $form = $this->createForm(SurveyType::class, $survey);
-          // dump($form);
+    //       $form = $this->createForm(SurveyType::class, $survey);
+    //       dump($form);
      
-          // $form->handleRequest($request);
-          // if ($form->isSubmitted() && $form->isValid()) {
-          //     $data= $form->getData();
+    //       $form->handleRequest($request);
+    //       if ($form->isSubmitted() && $form->isValid()) {
+    //           $data= $form->getData();
   
-          //     $entityManager = $this->getDoctrine()->getManager();
-          //     $entityManager->persist($survey);
-          //     $entityManager->flush();
+    //           $entityManager = $this->getDoctrine()->getManager();
+    //           $entityManager->persist($survey);
+    //           $entityManager->flush();
   
   
-          //     return $this->redirectToRoute('admin_surveys');
-          // }
+    //           return $this->redirectToRoute('admin_surveys');
+    //       }
       
-          return $this->render('admin/pages/create_user.html.twig'
-          // , [
-          //     'form' => $form->createView()
-          // ]
-        );
-      }
+    //       return $this->render('admin/pages/create_user.html.twig'
+    //       , [
+    //           'form' => $form->createView()
+    //       ]
+    //     );
+    //   }
+
+    /**
+     * @Route("/admin/user/create", name="admin_create_user")
+     */
+    public function addUser(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
+    {
+        $user = new User();
+        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // encode the plain password
+            $user->setPassword(
+                $passwordEncoder->encodePassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
+            $user->setRoles(["ROLE_USER"]);
+            $user->setToken(md5(uniqid(rand(), true)));
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            // do anything else you need here, like send an email
+
+            // return $guardHandler->authenticateUserAndHandleSuccess(
+            //     $user,
+            //     $request,
+            //     $authenticator,
+            //     'admin_secured_area' // firewall name in security.yaml
+            // );
+
+            return $this->redirectToRoute('admin_create_user');
+        }
+
+        return $this->render('admin/pages/create_user.html.twig', [
+            'registrationForm' => $form->createView(),
+        ]);
+    }
 
     /**
       * @Route("/admin/user/edit", name="admin_edit_user")
