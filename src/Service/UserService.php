@@ -45,10 +45,13 @@ class UserService
         $users = array();
         foreach ($result as $oneUser) {
 
+
             $users[] = [
                'id' => $oneUser->getId(),
-               'email' => $oneUser->getEmail(),
+               'email' => $oneUser->getEmail(), 
                'fullname' => $oneUser->getFullname(),
+               'roles' => $oneUser->getRoles(),
+               
             ];
         }
 

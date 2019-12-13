@@ -21,7 +21,7 @@ class Survey
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private $name; 
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)

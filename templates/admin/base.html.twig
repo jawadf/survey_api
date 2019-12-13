@@ -106,7 +106,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- begin:: Header Mobile -->
 <div id="kt_header_mobile" class="kt-header-mobile  kt-header-mobile--fixed " >
 	<div class="kt-header-mobile__logo">
-		<a href="demo7/index.html">
+		<a href="demo7/index.html"> 
 			<img alt="Logo" src="./assets/media/logos/logo-6.png"/>
 		</a>
 	</div>
@@ -213,7 +213,6 @@ License: You must have a valid license purchased only from themeforest(the above
 <div class="kt-header-menu-wrapper kt-grid__item kt-grid__item--fluid" id="kt_header_menu_wrapper">
 	<div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile  kt-header-menu--layout- "  >
 		<ul class="kt-menu__nav ">
-            <li class="kt-menu__item {% block dashboard_active %}kt-menu__item--active {% endblock %}" aria-haspopup="true"><a href="{{ path('admin_panel') }}" class="kt-menu__link "><span class="kt-menu__link-text">Dashboard</span></a></li>
             <li class="kt-menu__item {% block surveys_active %}{% endblock %}" aria-haspopup="true"><a href="{{ path('admin_surveys') }}" class="kt-menu__link "><span class="kt-menu__link-text">Surveys</span></a></li>
             <li class="kt-menu__item {% block users_active %}{% endblock %} " aria-haspopup="true"><a href="{{ path('admin_users') }}" class="kt-menu__link "><span class="kt-menu__link-text">Users</span></a></li>
         </ul>
@@ -829,7 +828,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
             <h3 class="kt-subheader__title">
-                {% block subheader_title %}Dashboard{% endblock %}                          
+                {% block subheader_title %}{% endblock %}                          
             </h3>
         </div>
     </div>

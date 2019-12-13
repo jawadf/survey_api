@@ -9,18 +9,20 @@ use App\Service\SurveyService;
 use App\Service\UserService;
 use App\Form\Type\SurveyType;
 use App\Form\Type\DeleteType;
+use App\Repository\UserRepository;
 use App\Form\RegistrationFormType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Security\LoginFormAuthenticator;
+use Knp\Component\Pager\PaginatorInterface;
+use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 class AdminController extends AbstractController
 {
-
     private $surveyService;
     private $userService;
 
@@ -30,13 +32,13 @@ class AdminController extends AbstractController
         $this->userService = $userService;
     }
 
-    /**
-      * @Route("/admin", name="admin_panel")
-      */
-    public function index()
-    {
-        return $this->render('admin/base.html.twig');
-    }
+    // /**
+    //   * @Route("/admin", name="admin_panel")
+    //   */
+    // public function index()
+    // {
+    //     return $this->render('admin/base.html.twig');
+    // }
 
       /**************************************************
       *                 
@@ -45,16 +47,22 @@ class AdminController extends AbstractController
       **************************************************/
 
     /**
-      * @Route("/admin/survey", name="admin_surveys")
+      * @Route("/admin", name="admin_surveys")
       */
-    public function surveyPage()
+    public function surveyPage(PaginatorInterface $paginator, Request $request)
     {
         $allSurveys  = $this->surveyService->getAllSurveys();
         $allUsers  = $this->userService->getAllUsers();
 
+        $pagination = $paginator->paginate(
+          $allUsers, /* query NOT result */
+          $request->query->getInt('page', 1)/*page number*/,
+          12/*limit per page*/
+        );
+
         return $this->render('admin/pages/surveys.html.twig', [
             'all_surveys' => $allSurveys,
-            'all_users' => $allUsers
+            'pagination' => $pagination
         ]);
     }
 
@@ -74,8 +82,14 @@ class AdminController extends AbstractController
               $survey= $form->getData();
 
               $questions = $survey->getQuestions();
+              $branches = $survey->getBranches();
+
               foreach ($questions as $question) {
                 $question->setSurvey($survey);
+              }
+              
+              foreach ($branches as $branch) {
+                $branch->addSurvey($survey);
               }
   
               $entityManager = $this->getDoctrine()->getManager();
@@ -121,10 +135,16 @@ class AdminController extends AbstractController
 
             $survey= $form->getData();
 
-              $questions = $survey->getQuestions();
-              foreach ($questions as $question) {
-                $question->setSurvey($survey);
-              }
+            $questions = $survey->getQuestions();
+            $branches = $survey->getBranches();
+
+            foreach ($questions as $question) {
+              $question->setSurvey($survey);
+            }
+            
+            foreach ($branches as $branch) {
+              $branch->addSurvey($survey);
+            }
               
               if($questions) {
                   // Upload the image using a Service, check notes in ImagesUploader.php 
@@ -194,50 +214,26 @@ class AdminController extends AbstractController
       *                 
       *                USER METHODS
       * 
-      **************************************************/
+    **************************************************/
 
     /**
       * @Route("/admin/user", name="admin_users")
       */
-    public function usersPage() 
+    public function usersPage(PaginatorInterface $paginator, Request $request) 
     {
       $allUsers  = $this->userService->getAllUsers();
 
+      $pagination = $paginator->paginate(
+        $allUsers, /* query NOT result */
+        $request->query->getInt('page', 1)/*page number*/,
+        10/*limit per page*/
+      );
+
       return $this->render('admin/pages/users.html.twig', [
-        'all_users' => $allUsers
+        'pagination' => $pagination
       ]);
     }
 
-
-    // /**
-    //   * @Route("/admin/user/create", name="admin_create_user")
-    //   */
-    //   public function addUser(Request $request)
-    //   {
-    //       $survey = new Survey();
-  
-  
-    //       $form = $this->createForm(SurveyType::class, $survey);
-    //       dump($form);
-     
-    //       $form->handleRequest($request);
-    //       if ($form->isSubmitted() && $form->isValid()) {
-    //           $data= $form->getData();
-  
-    //           $entityManager = $this->getDoctrine()->getManager();
-    //           $entityManager->persist($survey);
-    //           $entityManager->flush();
-  
-  
-    //           return $this->redirectToRoute('admin_surveys');
-    //       }
-      
-    //       return $this->render('admin/pages/create_user.html.twig'
-    //       , [
-    //           'form' => $form->createView()
-    //       ]
-    //     );
-    //   }
 
     /**
      * @Route("/admin/user/create", name="admin_create_user")
@@ -281,11 +277,31 @@ class AdminController extends AbstractController
     }
 
     /**
-      * @Route("/admin/user/edit", name="admin_edit_user")
+      * @Route("/admin/user/{id}/edit", name="admin_edit_user")
       */
-      public function editUser(Request $request)
+      public function editUser(Request $request, $id, User $user)
       {
-          return $this->render('admin/pages/edit_user.html.twig');
+
+        $entityManager = $this->getDoctrine()->getManager();
+        if (null === $user = $entityManager->getRepository(User::class)->find($id)) {
+            throw $this->createNotFoundException('No user found for id '.$id);
+        }
+
+        $form = $this->createForm(RegistrationFormType::class, $user);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+          $user= $form->getData();
+
+          $entityManager->persist($user);
+          $entityManager->flush();
+          return $this->redirectToRoute('admin_users');
+    
+        } 
+          return $this->render('admin/pages/edit_user.html.twig', [
+            'edituser_form' => $form->createView()
+          ]);
       }
   
 

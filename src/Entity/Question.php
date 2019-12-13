@@ -105,7 +105,7 @@ class Question
     {
         $this->answerType = $answerType;
 
-        return $this;
+        return $this; 
     }
 
     public function getAnswers(): ?array

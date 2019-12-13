@@ -1,11 +1,12 @@
 
 var $collectionHolder;
-var $collectionHolder2;
+var $collectionHolder2; 
 
+var $questionCount = 1;
 
 // setup an "add a question" button/link
-var $addQuestionButton = $('<button type="button" class="btn btn-info">Add a question</button>');
-var $addAnswerButton = $('<button type="button" class="btn btn-info">Add an answer</button>');
+var $addQuestionButton = $('<button type="button" class="btn btn-info"><i class="flaticon-add-circular-button"></i>Add a question</button>');
+var $addAnswerButton = $('<button type="button" class="btn btn-success"><i class="flaticon-add-circular-button"></i>Add an answer</button>');
 
 var $addQuestionDiv = $('<div></div>').append($addQuestionButton);
 var $addAnswerDiv = $('<div></div>').append($addAnswerButton);
@@ -19,7 +20,7 @@ jQuery(document).ready(function() {
     $collectionHolder.append($addQuestionDiv);
 
     // add a delete link to all of the existing tag form li elements
-    $collectionHolder.find('li').each(function() {
+    $collectionHolder.find('span.card-delete').each(function() {
         addTagFormDeleteLink($(this));
     });
 
@@ -32,7 +33,7 @@ jQuery(document).ready(function() {
     $collectionHolder2.append($addAnswerDiv);
     $collectionHolder2.data('index', $collectionHolder2.find(':input').length);
     $collectionHolder2.find('li').each(function() {
-        addTagFormDeleteLink($(this));
+        addAnswerDeleteLink($(this));
     });
     
 
@@ -46,6 +47,9 @@ jQuery(document).ready(function() {
          //add a new Answer form 
          addAnswerForm($collectionHolder2, $addAnswerDiv);
     });
+
+    // Conditionally render the 'Add answers' functionality
+    renderAnswerOptions();
 
 });
 
@@ -78,12 +82,37 @@ function addQuestionForm($collectionHolder, $addQuestionDiv) {
     // increase the index with one for the next item
     $collectionHolder.data('index', index + 1);
 
-    var $newFormLi = $('<li></li>').append(newForm);
+    // increase the questions' counter by one
+    $questionCount++;
+
+    var $newFormLi = $(`
+    <!--begin::Accordion-->
+    <div class="accordion my-accordion accordion-solid accordion-toggle-plus" id="accordionExample${$questionCount}">
+        <span class="card-delete"></span>
+		<div class="card">
+			<div class="card-header" id="headingOne${$questionCount}">
+				<div class="card-title" data-toggle="collapse" data-target="#collapseOne${$questionCount}" aria-expanded="true" aria-controls="collapseOne${$questionCount}">
+					<i class="flaticon-pie-chart-1"></i> Question ${$questionCount}
+				</div>
+			</div>
+			<div id="collapseOne${$questionCount}" class="collapse show" aria-labelledby="headingOne${$questionCount}" data-parent="#accordionExample${$questionCount}">
+                <div class="card-body">
+                    ${newForm}
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--end::Accordion-->
+    `);
+    //.append(newForm);
     $addQuestionDiv.before($newFormLi);
 
 
     // add a delete link to the new form
-    addTagFormDeleteLink($newFormLi);
+    $newFormLi.find('span.card-delete').each(function() {
+        addTagFormDeleteLink($(this));
+    });
+    // addTagFormDeleteLink($newFormLi);
 
     // Add answer feature
     /******************************************************************************/
@@ -92,7 +121,7 @@ function addQuestionForm($collectionHolder, $addQuestionDiv) {
 
      prototype2 = prototype2.replace(/0/g, index);
 
-     var $addNewAnswerButton = $('<button type="button" class="new btn btn-info">Add an answer</button>');
+     var $addNewAnswerButton = $('<button type="button" class="new btn btn-success"><i class="flaticon-add-circular-button"></i>Add an answer</button>');
      var $addNewAnswerDiv = $('<div></div>').append($addNewAnswerButton);
 
     //var $collectionHolder3 = $("<ul class='form-group answers-list'  data-prototype='"+prototype2+"'></ul>");
@@ -101,15 +130,20 @@ function addQuestionForm($collectionHolder, $addQuestionDiv) {
     $collectionHolder3.append($addNewAnswerDiv);
 
 
-     $collectionHolder3.find('li').each(function() {
-         addTagFormDeleteLink($(this));
-     });
-     $collectionHolder3.data('index', $collectionHolder3.find(':input').length);
-     $addNewAnswerButton.on('click', function(e) {
-         addAnswerForm($collectionHolder3, $addNewAnswerDiv);
-     });
+    $collectionHolder3.find('li').each(function() {
+        addAnswerDeleteLink($(this));
+    });
+
+    $collectionHolder3.data('index', $collectionHolder3.find(':input').length);
+    $addNewAnswerButton.on('click', function(e) {
+        addAnswerForm($collectionHolder3, $addNewAnswerDiv);
+    });
+
+     // Conditionally render the 'Add answers' functionality
+    renderAnswerOptions();
+
    /*******************************************************************************/
-  
+
 }
 
 
@@ -131,21 +165,44 @@ function addQuestionForm($collectionHolder, $addQuestionDiv) {
 
 
      // Display the form in the page in an li, before the "Add an image" link li
-     var $newFormLi2 = $('<li></li>').append(newForm2);
+     var $newFormLi2 = $('<div></div>').append(newForm2);
      $addDiv.before($newFormLi2);
 
 
      // add a delete link to the new form
-     addTagFormDeleteLink($newFormLi2);
+     addAnswerDeleteLink($newFormLi2);
  }
 
 
 function addTagFormDeleteLink($formLi) {
-    var $removeFormButton = $('<button class="btn btn-danger" type="button">X</button>');
+    var $removeFormButton = $('<i class="flaticon-delete"></i>');
     $formLi.append($removeFormButton);
 
     $removeFormButton.on('click', function(e) {
         // remove the li for the tag form
         $formLi.remove();
     });
+}
+
+function addAnswerDeleteLink($formLi) {
+    var $removeFormButton = $('<i class="flaticon-delete-1 delete-answer-button"></i>');
+    $formLi.append($removeFormButton);
+
+    $removeFormButton.on('click', function(e) {
+        // remove the li for the tag form
+        $formLi.remove();
+    });
+}
+
+function renderAnswerOptions() {
+
+    $(".select-answer-type").change(function () {
+        if($(this).val()=="multiple" || $(this).val()=="dropdown"){
+            alert(`The value is ${$(this).val()}, please render the answers!`);
+        } else {
+            alert(`Don't render the answers!`);
+        }
+    })
+    .change();
+    
 }

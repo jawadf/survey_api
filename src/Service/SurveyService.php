@@ -69,18 +69,24 @@ class SurveyService
         foreach ($result as $oneSurvey) {
 
             $questions = $oneSurvey->getQuestions();
+            $branches = array();
+
+            foreach ( $oneSurvey->getBranches() as $branch) {
+                $branches[] = $branch->getName();
+            }
+
             $surveys[] = [
                'id' => $oneSurvey->getId(),
-               'url' => '',
                'name' => $oneSurvey->getName(),
                'description' => $oneSurvey->getDescription(),
                'format' => $oneSurvey->getFormat(),
                'user_id' => $oneSurvey->getUser()->getId(),
-               'questions' => sizeof($questions)
+               'questions' => sizeof($questions),
+               'branches' => $branches
             ];
         }
 
-        return json_encode($surveys);
+        return json_encode($surveys); 
     }
 
 

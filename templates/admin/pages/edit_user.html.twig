@@ -1,12 +1,210 @@
 {% extends "admin/base.html.twig" %} 
 
-{% block assets_path %}../../../{% endblock %} 
-{% block dashboard_active %}{% endblock %} 
-{% block surveys_active %}{% endblock %} 
+{% block assets_path %}../../../../{% endblock %} 
+{% block surveys_active %}{% endblock %}  
 {% block users_active %}kt-menu__item--active{% endblock %} 
-{% block subheader_title %}Edit User Details{% endblock %} 
+{% block subheader_title %}{% endblock %}
+{% block page_scripts %}<script src="./assets/js/demo7/pages/custom/user/edit-user.js" type="text/javascript"></script>{% endblock %} 
+{% block page_styles %}<link href="./assets/css/demo7/pages/wizard/wizard-4.css" rel="stylesheet" type="text/css" />{% endblock %}
+
 
 {% block content %}
+
+<div class="kt-content  kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
+    <!-- begin:: Content Head -->
+        <div class="kt-subheader   kt-grid__item" id="kt_subheader">
+            <div class="kt-container  kt-container--fluid ">
+                <!--begin::Back Button-->
+                <a href="{{ path('admin_users') }}" class="btn btn-clean btn-icon-sm">
+                    <i class="la la-long-arrow-left"></i>
+                    Back
+                </a>
+                <!--end::Back Button-->
+            </div>
+        </div> 
+    <!-- end:: Content Head -->
+                       <!-- begin:: Content -->
+                    <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+                        <div class="kt-wizard-v4" id="kt_user_add_user" data-ktwizard-state="step-first">
+                            {# <!--begin: Form Wizard Nav -->
+                            <div class="kt-wizard-v4__nav">
+                                <div class="kt-wizard-v4__nav-items nav">
+                                    <!--doc: Replace A tag with SPAN tag to disable the step link click -->
+                                    <a class="kt-wizard-v4__nav-item nav-item" href="#" data-ktwizard-type="step" data-ktwizard-state="current">
+                                        <div class="kt-wizard-v4__nav-body">
+                                            <div class="kt-wizard-v4__nav-number">
+                                                1
+                                            </div>
+                                            <div class="kt-wizard-v4__nav-label">
+                                                <div class="kt-wizard-v4__nav-label-title">
+                                                    Profile
+                                                </div>
+                                                <div class="kt-wizard-v4__nav-label-desc">
+                                                    User's Personal Information
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="kt-wizard-v4__nav-item nav-item" href="#" data-ktwizard-type="step">
+                                        <div class="kt-wizard-v4__nav-body">
+                                            <div class="kt-wizard-v4__nav-number">
+                                                2
+                                            </div>
+                                            <div class="kt-wizard-v4__nav-label">
+                                                <div class="kt-wizard-v4__nav-label-title">
+                                                    Account
+                                                </div>
+                                                <div class="kt-wizard-v4__nav-label-desc">
+                                                    User's Account & Settings
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="kt-wizard-v4__nav-item nav-item" href="#" data-ktwizard-type="step">
+                                        <div class="kt-wizard-v4__nav-body">
+                                            <div class="kt-wizard-v4__nav-number">
+                                                3
+                                            </div>
+                                            <div class="kt-wizard-v4__nav-label">
+                                                <div class="kt-wizard-v4__nav-label-title">
+                                                    Address
+                                                </div>
+                                                <div class="kt-wizard-v4__nav-label-desc">
+                                                    User's Shipping Address
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="kt-wizard-v4__nav-item nav-item" href="#" data-ktwizard-type="step">
+                                        <div class="kt-wizard-v4__nav-body">
+                                            <div class="kt-wizard-v4__nav-number">
+                                                4
+                                            </div>
+                                            <div class="kt-wizard-v4__nav-label">
+                                                <div class="kt-wizard-v4__nav-label-title">
+                                                    Submission
+                                                </div>
+                                                <div class="kt-wizard-v4__nav-label-desc">
+                                                    Review and Submit
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <!--end: Form Wizard Nav --> #}
+
+                            <div class="kt-portlet">
+                                <div class="kt-portlet__body kt-portlet__body--fit">
+                                    <div class="kt-grid">
+                                        <div class="kt-grid__item kt-grid__item--fluid kt-wizard-v4__wrapper">
+                                            <!--begin: Form Wizard Form-->
+                                              
+                                            <form class="kt-form" id="kt_user_add_form" method="post">
+                                            {{ form_start(edituser_form) }}
+                                                <!--begin: Form Wizard Step 1-->
+                                                <div class="kt-wizard-v4__content" data-ktwizard-type="step-content" data-ktwizard-state="current">
+                                                    <div class="kt-heading kt-heading--md">Edit User's Profile Details:</div>
+                                                    <div class="kt-section kt-section--first">
+                                                        <div class="kt-wizard-v4__form">
+                                                            <div class="row">
+                                                                <div class="col-xl-12">
+                                                                    <div class="kt-section__body">
+                                                                        <div class="form-group row">
+                                                                            <label class="col-xl-3 col-lg-3 col-form-label">Avatar</label>
+                                                                            <div class="col-lg-9 col-xl-6">
+                                                                                <div class="kt-avatar kt-avatar--outline" id="kt_user_add_avatar">
+                                                                                    <div class="kt-avatar__holder" style="background-image: url(./assets/media/users/300_10.jpg)"></div>
+                                                                                    <label class="kt-avatar__upload" data-toggle="kt-tooltip" title="Change avatar">
+                                                                                        <i class="fa fa-pen"></i>
+                                                                                        <input type="file" name="kt_user_add_user_avatar">
+                                                                                    </label>
+                                                                                    <span class="kt-avatar__cancel" data-toggle="kt-tooltip" title="Cancel avatar">
+																<i class="fa fa-times"></i>
+															</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                      
+                                                                        <div class="form-group row">
+                                                                            <label class="col-xl-3 col-lg-3 col-form-label">Full Name</label>
+                                                                            <div class="col-lg-9 col-xl-9">
+                                                                            {{ form_widget(edituser_form.fullname) }}
+                                                                                {# <input class="form-control" type="text" value="Anna Pavlova"> #}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group row">
+                                                                            <label class="col-xl-3 col-lg-3 col-form-label">Email Address</label>
+                                                                            <div class="col-lg-9 col-xl-9">
+                                                                                <div class="input-group">
+                                                                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-at"></i></span></div>
+                                                                                    {# <input type="text" class="form-control" value="anna.krox@loop.com" placeholder="Email" aria-describedby="basic-addon1"> #}
+                                                                                    {{ form_widget(edituser_form.email) }}
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group row">
+                                                                            <label class="col-xl-3 col-lg-3 col-form-label">Password</label>
+                                                                            <div class="col-lg-9 col-xl-9">
+                                                                                {# <input class="form-control" type="text" value="Loop Inc."> #}
+                                                                                {{ form_widget(edituser_form.plainPassword) }}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group row">
+                                                                            <label class="col-xl-3 col-lg-3 col-form-label">Contact Phone</label>
+                                                                            <div class="col-lg-9 col-xl-9">
+                                                                                <div class="input-group">
+                                                                                    <div class="input-group-prepend"><span class="input-group-text"><i class="la la-phone"></i></span></div>
+                                                                                    <input type="text" class="form-control" value="+45678967456" placeholder="Phone" aria-describedby="basic-addon1">
+                                                                                </div>
+                                                                                <span class="form-text text-muted">We'll never share your email with anyone else.</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group row">
+                                                                            <label class="col-xl-3 col-lg-3 col-form-label">Company Name</label>
+                                                                            <div class="col-lg-9 col-xl-9">
+                                                                                <input class="form-control" type="text" value="Loop Inc.">
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                        <div class="form-group form-group-last row">
+                                                                            <label class="col-xl-3 col-lg-3 col-form-label">Company Site</label>
+                                                                            <div class="col-lg-9 col-xl-9">
+                                                                                <div class="input-group">
+                                                                                    <input type="text" class="form-control" placeholder="Username" value="loop">
+                                                                                    <div class="input-group-append"><span class="input-group-text">.com</span></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--end: Form Wizard Step 1-->
+
+
+                                             <!--begin: Form Actions -->
+                                                 <div class="kt-form__actions">
+                                                    <button type="submit" class="btn-primary btn">
+                                                        Submit
+                                                    </button>
+                                                </div>
+                                                <!--end: Form Actions -->
+
+                                                {{ form_end(edituser_form) }}
+                                            </form>
+                                            <!--end: Form Wizard Form-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- end:: Content -->
+                </div>
 
 
 {% endblock %}

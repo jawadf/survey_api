@@ -1,7 +1,6 @@
 {% extends "admin/base.html.twig" %} 
 
-{% block assets_path %}../../{% endblock %} 
-{% block dashboard_active %}{% endblock %} 
+{% block assets_path %}../{% endblock %} 
 {% block surveys_active %}kt-menu__item--active {% endblock %} 
 {% block users_active %}{% endblock %} 
 {% block subheader_title %}Manage Surveys{% endblock %} 
@@ -151,6 +150,29 @@
         </div>
     </div>
 
+    	{# <!-- Modal -->
+		<div class="modal fade" id="kt_modal_6" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+					
+						<h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want to delete survey: "${surveyName}"?</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						</button>
+					</div>
+					<div class="modal-body">
+						<p>If you click on 'Delete', your survey will be permanently deleted and all the relevant data will be removed as well. Make sure you really want to delete, or else you will not be able to restore it.</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<a href="/survey_api/public/index.php/admin/survey/${ surveyId }/delete">
+							<button type="button" class="btn btn-primary">Delete</button>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div> #}
+
 
     <!-- begin:: Content Head -->
     <div class="kt-subheader   kt-grid__item" id="kt_subheader">
@@ -159,7 +181,7 @@
 
                 <h3 class="kt-subheader__title">
                 Surveys per user                          
-            </h3>
+                </h3>
 
                 <span class="kt-subheader__separator kt-subheader__separator--v"></span>
 
@@ -307,7 +329,7 @@
         <!--Begin::Section-->
         <div class="row">
 
-            {% for user in all_users %}
+            {% for user in pagination %}
           
             <div class="col-xl-3">
                 <!--Begin::Portlet-->
@@ -394,10 +416,7 @@
                 <!--End::Portlet-->
             </div>
 
-
             {% endfor %}
-
-
         </div>
         <!--End::Section-->
 
@@ -408,7 +427,12 @@
                 <div class="kt-portlet">
                     <div class="kt-portlet__body">
                         <!--begin: Pagination-->
-                        <div class="kt-pagination kt-pagination--brand">
+                        <!--begin: Navigation -->
+                            <div class="navigation">
+                                {{ knp_pagination_render(pagination) }}  
+                            </div>
+                        <!--end: Navigation -->
+                        {# <div class="kt-pagination kt-pagination--brand">
                             <ul class="kt-pagination__links">
                                 <li class="kt-pagination__link--first">
                                     <a href="#"><i class="fa fa-angle-double-left kt-font-brand"></i></a>
@@ -459,10 +483,10 @@
                                     <option value="100">100</option>
                                 </select>
                                 <span class="pagination__desc">
-                    Displaying 10 of 230 records
-                </span>
+                            Displaying 10 of 230 records
+                             </span>
                             </div>
-                        </div>
+                        </div> #}
                         <!--end: Pagination-->
                     </div>
                 </div>

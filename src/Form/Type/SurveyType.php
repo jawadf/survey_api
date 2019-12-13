@@ -4,6 +4,7 @@ namespace App\Form\Type;
 
 use App\Entity\Survey;
 use App\Entity\User;
+use App\Entity\Branch;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Form\Type\QuestionType;
 use Symfony\Component\Form\AbstractType;
@@ -23,7 +24,7 @@ class SurveyType extends AbstractType
             ])
             ->add('description', TextType::class,[
                 'attr' => ['class' => 'form-control']
-            ])
+            ]) 
             ->add('format', ChoiceType::class, [
                 'choices'  => [
                     'One question per screen' => 'one-question-per-screen',
@@ -35,6 +36,13 @@ class SurveyType extends AbstractType
                 'class' => User::class,
                 'choice_label' => 'id',
                 'attr' => ['class' => 'form-control']
+            ])
+            ->add('branches', EntityType::class, [
+                'class' => Branch::class,
+                 'multiple' => true,
+                'choice_label' => 'name',
+                'label' => 'add to branches',
+                'attr' => ['class' => 'form-control kt-selectpicker']
             ])
             ->add('questions', CollectionType::class, [
                 'entry_type' => QuestionType::class,

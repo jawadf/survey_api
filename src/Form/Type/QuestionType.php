@@ -28,16 +28,16 @@ class QuestionType extends AbstractType
             // ])
             ->add('answer_type', ChoiceType::class, [
                 'choices'  => [
-                    'Multiple Choice' => 'one-question-per-screen',
-                    'Single Choice' => 'all-questions-one-screen',
-                    'Star Rating' => 'all-questions-one-screen',
-                    'Textbox' => 'all-questions-one-screen',
-                    'Contact Info' => 'all-questions-one-screen',
-                    'Dropdown' => 'all-questions-one-screen',
-                    'Slider' => 'all-questions-one-screen',
-                    'Date/Time' => 'all-questions-one-screen',
+                    'Multiple Choice' => 'multiple',
+                    'Single Choice' => 'single',
+                    'Star Rating' => 'star',
+                    'Textbox' => 'textbox',
+                    'Contact Info' => 'contact',
+                    'Dropdown' => 'dropdown',
+                    'Slider' => 'slider',
+                    'Date/Time' => 'datetime',
                 ],
-                'attr' => ['class' => 'form-control']
+                'attr' => ['class' => 'form-control select-answer-type']
             ])
             
             ->add('answers', CollectionType::class, [
