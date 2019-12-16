@@ -51,13 +51,31 @@ class AdminController extends AbstractController
       */
     public function surveyPage(PaginatorInterface $paginator, Request $request)
     {
-        $allSurveys  = $this->surveyService->getAllSurveys();
-        $allUsers  = $this->userService->getAllUsers();
+        //$allSurveys  = $this->surveyService->getAllSurveys();
+        //$allUsers  = $this->userService->getAllUsers();
 
-        $pagination = $paginator->paginate(
-          $allUsers, /* query NOT result */
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $surveysQuery = $entityManager->createQuery(
+          'SELECT survey
+          FROM App\Entity\Survey survey'
+        );
+
+        $usersQuery = $entityManager->createQuery(
+          'SELECT user
+          FROM App\Entity\User user'
+        );
+
+        $allSurveys = $paginator->paginate(
+          $surveysQuery, /* query NOT result */
           $request->query->getInt('page', 1)/*page number*/,
           12/*limit per page*/
+        );
+
+        $pagination = $paginator->paginate(
+          $usersQuery, /* query NOT result */
+          $request->query->getInt('page', 1)/*page number*/,
+          8/*limit per page*/
         );
 
         return $this->render('admin/pages/surveys.html.twig', [

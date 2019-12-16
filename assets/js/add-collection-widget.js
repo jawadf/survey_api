@@ -21,7 +21,7 @@ jQuery(document).ready(function() {
     $collectionHolder.append($addQuestionDiv);
 
     // add a delete link to all of the existing tag form li elements
-    $collectionHolder.find('span.card-delete').each(function() {
+    $collectionHolder.find('a.card-delete').each(function() {
         addTagFormDeleteLink($(this));
     });
 
@@ -37,10 +37,8 @@ jQuery(document).ready(function() {
     // Conditionally render the 'Add answers' functionality 
     renderAnswerOptions($collectionHolder2, $addAnswerButton, $addAnswerDiv, 0);
 
-//     $addAnswerButton.on('click', function(e) {
-//         //add a new Answer form 
-//         addAnswerForm($collectionHolder2, $addAnswerDiv);
-//    });
+    // Add the 'jquery select2' functionality
+    $('.js-select-user').select2();
 
 });
 
@@ -79,7 +77,7 @@ function addQuestionForm($collectionHolder, $addQuestionDiv) {
     var $newFormLi = $(`
     <!--begin::Accordion-->
     <div class="accordion my-accordion accordion-solid accordion-toggle-plus" id="accordionExample${$questionCount}">
-        <span class="card-delete"></span>
+        <a class="card-delete"></a>
 		<div class="card">
 			<div class="card-header" id="headingOne${$questionCount}">
 				<div class="card-title" data-toggle="collapse" data-target="#collapseOne${$questionCount}" aria-expanded="true" aria-controls="collapseOne${$questionCount}">
@@ -100,7 +98,7 @@ function addQuestionForm($collectionHolder, $addQuestionDiv) {
 
 
     // add a delete link to the new form
-    $newFormLi.find('span.card-delete').each(function() {
+    $newFormLi.find('a.card-delete').each(function() {
         addTagFormDeleteLink($(this));
     });
     // addTagFormDeleteLink($newFormLi);
@@ -185,10 +183,11 @@ function renderAnswerOptions($collection, $button, $div, index) {
             $collection.find('li').each(function() {
                 addAnswerDeleteLink($(this));
             });
-
             $button.on('click', function(e) {
                 addAnswerForm($collection, $div);
            });
+
+           $collection.find(':input').attr("placeholder", "Type here to search");
 
         // If we do NOT need to render options
         } else {

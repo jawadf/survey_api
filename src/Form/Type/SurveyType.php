@@ -34,8 +34,8 @@ class SurveyType extends AbstractType
             ])
             ->add('user', EntityType::class, [
                 'class' => User::class,
-                'choice_label' => 'id',
-                'attr' => ['class' => 'form-control']
+                'choice_label' => 'fullname',
+                'attr' => ['class' => 'form-control js-select-user']
             ])
             ->add('branches', EntityType::class, [
                 'class' => Branch::class,
