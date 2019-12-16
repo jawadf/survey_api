@@ -15,6 +15,7 @@ jQuery(document).ready(function() {
 
     // Get the ul that holds the collection of questions
     $collectionHolder = $('ul.questions');
+    $collectionHolder2 = $('.answers-list');
 
     // add the "Add a question" anchor and li to the images ul
     $collectionHolder.append($addQuestionDiv);
@@ -26,30 +27,20 @@ jQuery(document).ready(function() {
 
     // count the current form inputs we have (e.g. 2), use that as the new
     // index when inserting a new item (e.g. 2)
-    $collectionHolder.data('index', $collectionHolder.find(':input').length);
-
-    // Add answer feature
-    $collectionHolder2 = $('.answers-list');
-    $collectionHolder2.append($addAnswerDiv);
-    $collectionHolder2.data('index', $collectionHolder2.find(':input').length);
-    $collectionHolder2.find('li').each(function() {
-        addAnswerDeleteLink($(this));
-    });
-    
+    $collectionHolder.data('index', $collectionHolder.find(':input').length);    
 
     $addQuestionButton.on('click', function(e) {
         // add a new Question form 
         addQuestionForm($collectionHolder, $addQuestionDiv);
-        
     });
 
-     $addAnswerButton.on('click', function(e) {
-         //add a new Answer form 
-         addAnswerForm($collectionHolder2, $addAnswerDiv);
-    });
+    // Conditionally render the 'Add answers' functionality 
+    renderAnswerOptions($collectionHolder2, $addAnswerButton, $addAnswerDiv, 0);
 
-    // Conditionally render the 'Add answers' functionality
-    renderAnswerOptions();
+//     $addAnswerButton.on('click', function(e) {
+//         //add a new Answer form 
+//         addAnswerForm($collectionHolder2, $addAnswerDiv);
+//    });
 
 });
 
@@ -127,51 +118,39 @@ function addQuestionForm($collectionHolder, $addQuestionDiv) {
     //var $collectionHolder3 = $("<ul class='form-group answers-list'  data-prototype='"+prototype2+"'></ul>");
     var $collectionHolder3 = $("#survey_questions_"+index+"_answers");
     $collectionHolder3.data('prototype', prototype2);
-    $collectionHolder3.append($addNewAnswerDiv);
 
-
-    $collectionHolder3.find('li').each(function() {
-        addAnswerDeleteLink($(this));
-    });
-
-    $collectionHolder3.data('index', $collectionHolder3.find(':input').length);
-    $addNewAnswerButton.on('click', function(e) {
-        addAnswerForm($collectionHolder3, $addNewAnswerDiv);
-    });
-
-     // Conditionally render the 'Add answers' functionality
-    renderAnswerOptions();
+    // Conditionally render the 'Add answers' functionality
+    renderAnswerOptions($collectionHolder3, $addNewAnswerButton, $addNewAnswerDiv, index);
 
    /*******************************************************************************/
 
 }
 
+function addAnswerForm($collection, $addDiv) {
+    // Get the data-prototype explained earlier
+    var prototype2 = $collection.data('prototype');
 
- function addAnswerForm($collection, $addDiv) {
-     // Get the data-prototype explained earlier
-     var prototype2 = $collection.data('prototype');
+    // get the new index
+    var index2 = $collection.data('index');
 
-     // get the new index
-     var index2 = $collection.data('index');
+    var newForm2 = prototype2;
+    // You need this only if you didn't set 'label' => false in your tags field in TaskType
+    // Replace '__name__label__' in the prototype's HTML to
+    // instead be a number based on how many items we have
+    newForm2 = newForm2.replace(/__name__/g, index2);
 
-     var newForm2 = prototype2;
-     // You need this only if you didn't set 'label' => false in your tags field in TaskType
-     // Replace '__name__label__' in the prototype's HTML to
-     // instead be a number based on how many items we have
-     newForm2 = newForm2.replace(/__name__/g, index2);
-
-     // increase the index with one for the next item
-     $collection.data('index', index2 + 1);
-
-
-     // Display the form in the page in an li, before the "Add an image" link li
-     var $newFormLi2 = $('<div></div>').append(newForm2);
-     $addDiv.before($newFormLi2);
+    // increase the index with one for the next item
+    $collection.data('index', index2 + 1);
 
 
-     // add a delete link to the new form
-     addAnswerDeleteLink($newFormLi2);
- }
+    // Display the form in the page in an li, before the "Add an image" link li
+    var $newFormLi2 = $('<div></div>').append(newForm2);
+    $addDiv.before($newFormLi2);
+
+
+    // add a delete link to the new form
+    addAnswerDeleteLink($newFormLi2);
+}
 
 
 function addTagFormDeleteLink($formLi) {
@@ -194,15 +173,27 @@ function addAnswerDeleteLink($formLi) {
     });
 }
 
-function renderAnswerOptions() {
+function renderAnswerOptions($collection, $button, $div, index) {
 
-    $(".select-answer-type").change(function () {
-        if($(this).val()=="multiple" || $(this).val()=="dropdown"){
-            alert(`The value is ${$(this).val()}, please render the answers!`);
+    $(`#survey_questions_${index}_answer_type`).change(function () {
+        // If we DO need to render options
+        if($(this).val()=="multiple" || $(this).val()=="single" || $(this).val()=="dropdown"){
+
+            // Add answer feature
+            $collection.append($div);
+            $collection.data('index', $collection.find(':input').length);
+            $collection.find('li').each(function() {
+                addAnswerDeleteLink($(this));
+            });
+
+            $button.on('click', function(e) {
+                addAnswerForm($collection, $div);
+           });
+
+        // If we do NOT need to render options
         } else {
-            alert(`Don't render the answers!`);
+            $collection.children().remove();
         }
     })
     .change();
-    
 }
