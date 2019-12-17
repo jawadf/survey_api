@@ -55,38 +55,10 @@ class UserService
             ];
         }
 
-        return $users;
+        return json_encode($users);
     }
 
 
-    /**
-     * Check for email and password, return Token
-     * 
-     */
-    public function loginMethod($email, $password)
-    {
-        $user = $this->usersRepository->findOneBy([
-            'email' => $email 
-        ]);
-        $isPasswordValid = $this->passwordEncoder->isPasswordValid($user, $password);
-        
-        $result = array();
-        if($isPasswordValid) {
-            $result[] = [ 
-                'Message' => 'success',
-                'email' => $user->getEmail(),
-                'token' => $user->getToken(),
-                'isPasswordValid' => $isPasswordValid
-            ];
-        } else {
-            $result[] = [
-                'Message' => 'Sorry! Invalid email or password'
-            ];
-        } 
-
-        echo json_encode($result);
-        
-    }
 
 
     /**

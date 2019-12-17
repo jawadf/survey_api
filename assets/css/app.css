@@ -50,3 +50,7 @@ ul.questions {
     border: 1px solid rgba(149, 149, 149, 0.246);
     border-radius: 5px;
 }
+
+.hidden-row {
+    display: none;
+}

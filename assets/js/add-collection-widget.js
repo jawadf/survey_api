@@ -37,8 +37,30 @@ jQuery(document).ready(function() {
     // Conditionally render the 'Add answers' functionality 
     renderAnswerOptions($collectionHolder2, $addAnswerButton, $addAnswerDiv, 0);
 
-    // Add the 'jquery select2' functionality
-    $('.js-select-user').select2();
+    // Add jQuery UI's autocomplete functionality
+    var users = $('#survey_user').data("users");
+    var usersArray = [];
+    users.forEach(element => {
+        usersArray.push(element.fullname);
+    });
+
+    $('#survey_user').autocomplete({ // autocomplete
+        source: usersArray,
+        autoFocus: true,
+        appendTo: ".ui-menu-item-wrapper",
+        classes: {
+            "ui-autocomplete": "highlight"
+          },
+        delay: 100, 
+        change: function( event, ui ) {
+              var fullname = $('#survey_user').val();
+
+              // find element with this fullname, get the id of that element
+              var relevantUser = users.find(el => el.fullname == fullname);
+
+              $('#survey_user_hidden').val(relevantUser.id);
+         }
+      });
 
 });
 

@@ -93,12 +93,15 @@ class AdminController extends AbstractController
           $newQuestion = new Question();
           $survey->addQuestion($newQuestion);
 
+          //Get users
+          $allUsers  = $this->userService->getAllUsers();
+
           $form = $this->createForm(SurveyType::class, $survey);
      
           $form->handleRequest($request);
           if ($form->isSubmitted() && $form->isValid()) {
               $survey= $form->getData();
-
+              
               $questions = $survey->getQuestions();
               $branches = $survey->getBranches();
 
@@ -118,7 +121,8 @@ class AdminController extends AbstractController
           }
       
           return $this->render('admin/pages/create_survey.html.twig', [
-              'form' => $form->createView()
+              'form' => $form->createView(),
+              'all_users' => $allUsers
           ]);
       }
   
@@ -219,8 +223,6 @@ class AdminController extends AbstractController
     {
         $user = $this->userService->getUserObject($id);
         $userSurveys  = $this->surveyService->getUserSurveys($user);
-
-        dump($userSurveys);
 
         return $this->render('admin/pages/user_surveys.html.twig', [
             'user_surveys' => $userSurveys,

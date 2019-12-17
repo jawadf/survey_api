@@ -156,6 +156,7 @@
                         <th>Name</th>
                         <th>Description</th>
                         <th>Format</th>
+                        <th>User</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -166,8 +167,8 @@
                         <td>{{ survey.name }}</td>
                         <td>{{ survey.description }}</td>
                         <td>{{ survey.format }}</td>
-                        <td>
-                                        
+                        <td>{{ survey.user.fullname }}</td>
+                        <td>      
                             <a href="/admin/survey/{{ survey.id }}/edit" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit details">
                                 <i class="la la-edit"></i>
                             </a>

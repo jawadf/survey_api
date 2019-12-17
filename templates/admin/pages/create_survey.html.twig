@@ -40,7 +40,7 @@
 				</div>
 			</div>
 			<!--begin::Form-->
-			<form class="kt-form " method="post">
+			<form class="kt-form" method="post">
 				<div class="kt-portlet__body">
                     {{ form_start(form) }}
                     <div class="form-group">
@@ -55,18 +55,16 @@
                         <label>Format</label>
 						{{ form_widget(form.format) }}
 					</div>
-					
                     <div class="form-group">
-                        <label>User ID</label>
-						{{ form_widget(form.user) }}
-						{# <span class="form-text text-muted">Lorem ipsum dolor amet sit eta.</span> #}
+                        <label>Choose User</label>
+						{# {{ form_widget(form.user) }} #}                 
+						<input id="survey_user" class="form-control js-select-user"  data-users="{{ all_users }}" ></input>
+						<input  id="survey_user_hidden" name="survey[user]" type="hidden" ></input>
 					</div>
-					
                     <div class="form-group">
                         <label>Add survey to branches:</label>
 						{{ form_widget(form.branches) }}
 					</div>
-
 					<div class="form-group">
 						<ul class="questions"   data-prototype="{{ form_widget(form.questions.vars.prototype)|e('html_attr') }}">
 						{% for questionField in form.questions %}
@@ -114,7 +112,10 @@
 						<button type="reset" class="btn btn-secondary">Cancel</button>
 					</div>
 				</div>
-				{{ form_end(form) }}
+				{# {{ form_widget(form._csrf_token) }} #}
+				{# {{ form_widget(formView._token) }} #}
+				{{ form_widget(form._token) }}
+				{{ form_end(form, {'render_rest': false}) }}
 			</form>
 			<!--end::Form-->			
 		</div>
