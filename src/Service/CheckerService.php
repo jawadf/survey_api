@@ -2,7 +2,7 @@
 
 namespace App\Service;  
 
-use App\Entity\User;
+use App\Entity\Business;
 use App\Entity\Survey;
 use App\Entity\Branch;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,27 +10,27 @@ use Doctrine\ORM\EntityManagerInterface;
 class CheckerService
 {    
     
-    private $usersRepository;
+    private $businessRepository;
     private $surveyRepository;
     private $branchRepository;
     
     public function __construct(EntityManagerInterface $entityManager) {
-        $this->usersRepository = $entityManager->getRepository(User::class);
+        $this->businessRepository = $entityManager->getRepository(Business::class);
         $this->surveyRepository = $entityManager->getRepository(Survey::class);
         $this->branchRepository = $entityManager->getRepository(Branch::class);
     }
 
     /**
-     *  Checks if there's a User with this id
+     *  Checks if there's a Business with this id
      */
-    public function userChecker(int $id)  
+    public function businessChecker(int $id)  
     {
-        $user = $this->usersRepository->findOneBy([
+        $business = $this->businessRepository->findOneBy([
             'id' => $id
         ]);
                 
-        if ($user) {
-            return array('status' => true, 'user' => $user );
+        if ($business) {
+            return array('status' => true, 'business' => $business );
         } else {
             return array( 'status' => false );
         }  

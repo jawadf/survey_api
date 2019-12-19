@@ -3,7 +3,7 @@
 namespace App\Form\Type; 
 
 use App\Entity\Survey;
-use App\Entity\User;
+use App\Entity\Business;
 use App\Entity\Branch;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Form\Type\QuestionType;
@@ -32,10 +32,10 @@ class SurveyType extends AbstractType
                 ],
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('user', EntityType::class, [
-                'class' => User::class,
+            ->add('business', EntityType::class, [
+                'class' => Business::class,
                 'required' => false,
-                'choice_label' => 'fullname',
+                'choice_label' => 'name',
                 'attr' => ['class' => 'form-control hidden-row']
             ])
             ->add('branches', EntityType::class, [

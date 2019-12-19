@@ -2,7 +2,8 @@
 
 namespace App\Service;
 
-use App\Entity\User;
+use App\Entity\Manager;
+use App\Entity\Employee;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -12,27 +13,28 @@ class UserService
     
     private $usersRepository;
     
-    private $entityManager;
+    // private $entityManager;
 
-    private $passwordEncoder;
+    // private $passwordEncoder;
     
-    public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder) {
-        $this->usersRepository = $entityManager->getRepository(User::class);
-        $this->entityManager = $entityManager;
-        $this->passwordEncoder = $passwordEncoder;
-    }
+     public function __construct(EntityManagerInterface $entityManager, UserPasswordEncoderInterface $passwordEncoder) {
+         $this->managersRepository = $entityManager->getRepository(Manager::class);
+         $this->employeesRepository = $entityManager->getRepository(Employee::class);
+    //     $this->entityManager = $entityManager;
+    //     $this->passwordEncoder = $passwordEncoder;
+     }
 
-    /**
-     * Get User Object
-     */
-    public function getUserObject(int $id)
-    { 
-        $user = $this->usersRepository->findOneBy([
-            'id' => $id
-        ]);
+    // /**
+    //  * Get User Object
+    //  */
+    // public function getUserObject(int $id)
+    // { 
+    //     $user = $this->usersRepository->findOneBy([
+    //         'id' => $id
+    //     ]);
 
-        return $user;
-    }
+    //     return $user;
+    // }
 
 
     /**
@@ -40,11 +42,12 @@ class UserService
      */
     public function getAllUsers()
     { 
-        $result = $this->usersRepository->findAll();
+        $arrayManagers = $this->managersRepository->findAll();
+        $arrayEmployees = $this->employeesRepository->findAll();
+        $result = array_merge($arrayManagers, $arrayEmployees);
 
         $users = array();
         foreach ($result as $oneUser) {
-
 
             $users[] = [
                'id' => $oneUser->getId(),
@@ -61,42 +64,41 @@ class UserService
 
 
 
-    /**
-     * Used for sign up
-     */
-    public function registerMethod($email, $password)
-    {
-        $return = array();
-         if ($email && $password) {
+    // /**
+    //  * Used for sign up
+    //  */
+    // public function registerMethod($email, $password)
+    // {
+    //     $return = array();
+    //      if ($email && $password) {
         
-            $userExists = $this->usersRepository->findOneBy([
-                'email' => $email
-            ]);
+    //         $userExists = $this->usersRepository->findOneBy([
+    //             'email' => $email
+    //         ]);
 
-            if($userExists) { 
-                $return = array('message' => 'User already exists');
-            } else {
-                $user = new User();
-                $user->setEmail($email);
-                $user->setPassword($this->passwordEncoder->encodePassword( $user, $password ));
-                $user->setToken(md5(uniqid(rand(), true)));
-                $user->setRoles(['ROLE_USER']);
+    //         if($userExists) { 
+    //             $return = array('message' => 'User already exists');
+    //         } else {
+    //             $user = new User();
+    //             $user->setEmail($email);
+    //             $user->setPassword($this->passwordEncoder->encodePassword( $user, $password ));
+    //             $user->setToken(md5(uniqid(rand(), true)));
+    //             $user->setRoles(['ROLE_USER']);
 
-                $this->entityManager->persist($user);
-                $this->entityManager->flush();
+    //             $this->entityManager->persist($user);
+    //             $this->entityManager->flush();
 
-                $return = array('success' => 1);   
-            }
+    //             $return = array('success' => 1);   
+    //         }
 
-            return $return;
+    //         return $return;
 
-         } else {
-            $return = array('success' => 0);
-            return $return;
-        }
+    //      } else {
+    //         $return = array('success' => 0);
+    //         return $return;
+    //     }
 
-        echo json_encode($return);      
-    }
-
+    //     echo json_encode($return);      
+    // }
 
 }

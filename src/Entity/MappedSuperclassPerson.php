@@ -2,67 +2,62 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\ArrayCollection; 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\MappedSuperclass
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
-class User implements UserInterface
+class MappedSuperclassPerson implements UserInterface
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
-
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
-    private $email;
-
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $roles = [];
-
-    /**
-     * @var string The hashed password
-     * @ORM\Column(type="string")
-     */
-    private $password;
-
-    /**
-     * @ORM\Column(type="string", unique=true, nullable=true)
-     */
-    private $token;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Survey", mappedBy="user")
-     */
-    private $surveys;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Branch", mappedBy="user")
-     */
-    private $branches;
+    protected $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $fullname;
-    
+    protected $fullname;
 
-    public function __construct()
-    {
-        $this->surveys = new ArrayCollection();
-        $this->branches = new ArrayCollection();
-    }
+    /**
+     * @ORM\Column(type="string", length=180, unique=true)
+     */
+    protected $email;
+
+    
+    /**
+     * @ORM\Column(type="json")
+     */
+    protected $roles = [];
+    
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $password;
+    
+    /**
+     * @ORM\Column(type="string", unique=true, nullable=true)
+     */
+    protected $token;
+    
+    /**
+     * @ORM\Column(type="integer", nullable=true, unique=true)
+     */
+    protected $phoneNumber;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $picture;
+
 
     public function getId(): ?int
     {
@@ -156,68 +151,6 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|Survey[]
-     */
-    public function getSurveys(): Collection
-    {
-        return $this->surveys;
-    }
-
-    public function addSurvey(Survey $survey): self
-    {
-        if (!$this->surveys->contains($survey)) {
-            $this->surveys[] = $survey;
-            $survey->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSurvey(Survey $survey): self
-    {
-        if ($this->surveys->contains($survey)) {
-            $this->surveys->removeElement($survey);
-            // set the owning side to null (unless already changed)
-            if ($survey->getUser() === $this) {
-                $survey->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Branch[]
-     */
-    public function getBranches(): Collection
-    {
-        return $this->branches;
-    }
-
-    public function addBranch(Branch $branch): self
-    {
-        if (!$this->branches->contains($branch)) {
-            $this->branches[] = $branch;
-            $branch->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBranch(Branch $branch): self
-    {
-        if ($this->branches->contains($branch)) {
-            $this->branches->removeElement($branch);
-            // set the owning side to null (unless already changed)
-            if ($branch->getUser() === $this) {
-                $branch->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getFullname(): ?string
     {
         return $this->fullname;
@@ -230,5 +163,29 @@ class User implements UserInterface
         return $this;
     }
 
+    public function getPhoneNumber(): ?int
+    {
+        return $this->phoneNumber;
+    }
 
+    public function setPhoneNumber(int $phoneNumber): self
+    {
+        $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(string $picture): self
+    {
+        $this->picture = $picture;
+
+        return $this;
+    }
+
+    
 }

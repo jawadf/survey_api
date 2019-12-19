@@ -39,14 +39,19 @@ class Survey
     private $format;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="surveys")
-     */
-    private $user;
-
-    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Branch", mappedBy="survey")
      */
     private $branches;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Admin", inversedBy="Surveys")
+     */
+    private $admin;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Business", inversedBy="surveys")
+     */
+    private $business;
 
 
     public function __construct()
@@ -127,18 +132,6 @@ class Survey
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
     /**
      * @return Collection|Branch[]
      */
@@ -163,6 +156,30 @@ class Survey
             $this->branches->removeElement($branch);
             $branch->removeSurvey($this);
         }
+
+        return $this;
+    }
+
+    public function getAdmin(): ?Admin
+    {
+        return $this->admin;
+    }
+
+    public function setAdmin(?Admin $admin): self
+    {
+        $this->admin = $admin;
+
+        return $this;
+    }
+
+    public function getBusiness(): ?Business
+    {
+        return $this->business;
+    }
+
+    public function setBusiness(?Business $business): self
+    {
+        $this->business = $business;
 
         return $this;
     }

@@ -26,25 +26,28 @@
                       
 
                         <div class="kt-portlet kt-portlet--mobile">
+
                             <div class="kt-portlet__head kt-portlet__head--lg">
                                 <div class="kt-portlet__head-label">
                                     <span class="kt-portlet__head-icon">
                                         <i class="kt-font-brand flaticon2-line-chart"></i>
                                     </span>
                                     <h3 class="kt-portlet__head-title">
-                                        All Users
+                                        Managers
                                     </h3>
                                 </div>
                                 <div class="kt-portlet__head-toolbar">
                                     <div class="kt-portlet__head-wrapper">
                                         <div class="kt-portlet__head-actions">
                                             <a href="{{ path('admin_create_user') }}" class="btn btn-brand btn-elevate btn-icon-sm">
-                                                <i class="la la-plus"></i> Add New User
+                                                <i class="la la-plus"></i> Add New Manager
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                        
 
                             <div class="kt-portlet__body">
                                 <!--begin: Datatable -->
@@ -59,7 +62,7 @@
                                         </tr>
                                     </thead>
                                        <tbody>
-                                        {% for user in pagination %}
+                                        {% for user in managers %}
                                         <tr>
                                             <td>{{ user.id }}</td>
                                             <td>{{ user.fullname }}</td>
@@ -75,7 +78,7 @@
                                             <td>
                                             {# "{{ path('admin_edit_user', user.id) }}"   #}
                                                   
-                                                <a href="/survey_api/public/index.php/admin/user/{{ user.id }}/edit" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit details">
+                                                <a href="{{ path('admin_edit_user', {id: user.id}) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit details">
                                                     <i class="la la-edit"></i>
                                                 </a>
                                             </td>
@@ -87,13 +90,89 @@
                                 <!--end: Datatable -->
                                 <!--begin: Navigation -->
                                 <div class="navigation">
-                                  {{ knp_pagination_render(pagination) }}  
+                                  {{ knp_pagination_render(managers) }}  
                                 </div>
                                 <!--end: Navigation -->
-                            </div>
-
-                            
+                            </div>                    
                         </div>
+
+                            <div class="kt-portlet kt-portlet--mobile">
+
+                                <div class="kt-portlet__head kt-portlet__head--lg">
+                                    <div class="kt-portlet__head-label">
+                                        <span class="kt-portlet__head-icon">
+                                            <i class="kt-font-brand flaticon2-line-chart"></i>
+                                        </span>
+                                        <h3 class="kt-portlet__head-title">
+                                        Employees
+                                        </h3>
+                                    </div>
+                                    <div class="kt-portlet__head-toolbar">
+                                        <div class="kt-portlet__head-wrapper">
+                                            <div class="kt-portlet__head-actions">
+                                                <a href="{{ path('admin_create_user') }}" class="btn btn-brand btn-elevate btn-icon-sm">
+                                                    <i class="la la-plus"></i> Add New Employee
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="kt-portlet__body">
+                                    <!--begin: Datatable -->
+                                    <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                                        <thead>
+                                            <tr>
+                                                <th>Record ID</th>
+                                                <th>Full Name</th>
+                                                <th>Email</th>
+                                                <th>Roles</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for user in employees %}
+                                            <tr>
+                                                <td>{{ user.id }}</td>
+                                                <td>{{ user.fullname }}</td>
+                                                <td>{{ user.email }}</td>
+                                                <td>
+                                                    <span class="kt-badge kt-badge--brand kt-badge--inline kt-badge--pill kt-badge--rounded">User</span>
+                                                    {% for role in user.roles %}
+                                                        {% if role == 'ROLE_ADMIN' %}
+                                                            <span class="kt-badge kt-badge--warning kt-badge--inline kt-badge--pill kt-badge--rounded">Admin</span>
+                                                        {% endif %} 
+                                                    {% endfor %}
+                                                </td>
+                                                <td>
+                                                    <a href="{{ path('admin_edit_user', {id: user.id}) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit details">
+                                                        <i class="la la-edit"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <!--end: Datatable -->
+                                    <!--begin: Navigation -->
+                                    <div class="navigation">
+                                    {{ knp_pagination_render(employees) }}  
+                                    </div>
+                                    <!--end: Navigation -->
+                                </div>                   
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
                     </div>
                     <!-- end:: Content -->
                 </div>

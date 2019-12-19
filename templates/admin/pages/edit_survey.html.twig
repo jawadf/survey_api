@@ -29,7 +29,7 @@
 					</h3>
 				</div>
 			</div>
-			<!--begin::Form-->
+			{# <!--begin::Form-->
 			<form class="kt-form " method="post">
 				 <div class="kt-portlet__body">
                     {{ form_start(form) }}
@@ -61,14 +61,8 @@
 						{% for questionField in form.questions %}
 								<li>
 									{{ form_errors(questionField) }}
-									
-									{# Input 1 #}
 									{{ form_row(questionField.title) }}
-
-									{# Input 2 #}
 									{{ form_row(questionField.answer_type) }}
-
-									{# UL #}
 									<ul class="form-group answers-area"  data-prototype="{{ form_widget(questionField.answers.vars.prototype)|e('html_attr') }}">
 										{% for answer in questionField.answers %}
 										<li>	{{ form_widget(answer) }}<li>
@@ -89,7 +83,89 @@
 				</div>
 				{{ form_end(form) }}
 			</form>
-			<!--end::Form-->			
+			<!--end::Form--> #}
+
+
+
+			<!--begin::Form-->
+			<form class="kt-form" method="post">
+				<div class="kt-portlet__body">
+                    {{ form_start(form) }}
+                    <div class="form-group">
+                        <label class="class-for-label">Name</label>
+                        {{ form_widget(form.name) }}
+					</div>
+                    <div class="form-group">
+                        <label>Description</label>
+						{{ form_widget(form.description) }}
+					</div>
+                    <div class="form-group">
+                        <label>Format</label>
+						{{ form_widget(form.format) }}
+					</div>
+                    <div class="form-group">
+                        <label>Choose Business</label>
+						<input id="survey_business" class="form-control" value="{{ selected_business }}"  data-business="{{ all_businesses }}" ></input>
+						<input  id="survey_business_hidden" name="survey[business]" type="hidden" ></input>
+					</div>
+                    <div class="form-group">
+                        <label>Add survey to branches:</label>
+						{{ form_widget(form.branches) }}
+					</div>
+					<div class="form-group">
+						<ul class="questions"   data-prototype="{{ form_widget(form.questions.vars.prototype)|e('html_attr') }}">
+						{% for questionField in form.questions %}
+							
+									<!--begin::Accordion-->
+										<div class="accordion my-accordion accordion-solid accordion-toggle-plus" id="accordionExample6">
+											<a class="card-delete"></a>
+											<div class="card">
+												<div class="card-header" id="headingOne6">
+													<div class="card-title" data-toggle="collapse" data-target="#collapseOne6" aria-expanded="true" aria-controls="collapseOne6">
+														<i class="flaticon-pie-chart-1"></i> Question 1
+													</div>
+												</div>
+												<div id="collapseOne6" class="collapse show" aria-labelledby="headingOne6" data-parent="#accordionExample6">
+													<div class="card-body">
+														{{ form_errors(questionField) }}
+												
+														{{ form_row(questionField.title) }}
+
+														{{ form_row(questionField.answer_type) }}
+														
+														{{ form_row(questionField.answers) }}
+													</div>
+												</div>
+											</div>
+										</div>
+										<!--end::Accordion-->
+									
+
+									{# UL #}
+									 {# <ul class="form-group answers-area"  data-prototype="{{ form_widget(questionField.answers.vars.prototype)|e('html_attr') }}">
+										{% for answer in questionField.answers %}
+											{{ form_widget(answer) }}
+										{% endfor %}
+									</ul>  
+									 #}
+								
+						{% endfor %}
+						</ul>
+					</div>
+
+				</div>
+				<div class="kt-portlet__foot">
+					<div class="kt-form__actions">					
+						 <button type="submit" class="btn btn-primary">Submit</button> 
+						<button type="reset" class="btn btn-secondary">Cancel</button>
+					</div>
+				</div>
+				{# {{ form_widget(form._csrf_token) }} #}
+				{# {{ form_widget(formView._token) }} #}
+				{{ form_widget(form._token) }}
+				{{ form_end(form, {'render_rest': false}) }}
+			</form>
+			<!--end::Form-->
 		</div>
 		<!--end::Portlet-->
 	    </div>

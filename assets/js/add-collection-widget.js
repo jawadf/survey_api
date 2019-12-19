@@ -37,15 +37,15 @@ jQuery(document).ready(function() {
     // Conditionally render the 'Add answers' functionality 
     renderAnswerOptions($collectionHolder2, $addAnswerButton, $addAnswerDiv, 0);
 
-    // Add jQuery UI's autocomplete functionality
-    var users = $('#survey_user').data("users");
-    var usersArray = [];
-    users.forEach(element => {
-        usersArray.push(element.fullname);
+    /************ Add jQuery UI's autocomplete functionality  *********/
+    var businesses = $('#survey_business').data("business");
+    var businessesArray = [];
+    businesses.forEach(element => {
+        businessesArray.push(element.name);
     });
 
-    $('#survey_user').autocomplete({ // autocomplete
-        source: usersArray,
+    $('#survey_business').autocomplete({ 
+        source: businessesArray,
         autoFocus: true,
         appendTo: ".ui-menu-item-wrapper",
         classes: {
@@ -53,14 +53,41 @@ jQuery(document).ready(function() {
           },
         delay: 100, 
         change: function( event, ui ) {
-              var fullname = $('#survey_user').val();
+              // Get the selected name from the "UI" input
+              var name = $('#survey_business').val();
 
-              // find element with this fullname, get the id of that element
-              var relevantUser = users.find(el => el.fullname == fullname);
+              // find element with this name, get the id of that element
+              var relevantBusiness = businesses.find(el => el.name == name);
 
-              $('#survey_user_hidden').val(relevantUser.id);
-         }
-      });
+              // set the value of the "hidden" input (not the "UI" input)
+              $('#survey_business_hidden').val(relevantBusiness.id);
+              $('#survey_business').attr("value", name);
+            }
+        });
+
+    // Work with id instead of name of the business
+    
+    /**********************************************************************/
+
+
+    /******  LIVE SEARCH   ******/
+
+      $.ajax({
+        url:'',
+        type: "GET",
+        dataType: "json",
+        data: {
+            "some_var_name": "some_var_value"
+        },
+        async: true,
+        success: function (data)
+            {
+                console.log(data)
+                $('div#ajax-results').html(data.output);
+            }
+        });
+
+    /****************************/
 
 });
 
@@ -208,12 +235,6 @@ function renderAnswerOptions($collection, $button, $div, index) {
             $button.on('click', function(e) {
                 addAnswerForm($collection, $div);
            });
-
-           $collection.find(':input').attr("placeholder", "Type here to search");
-
-        // If we do NOT need to render options
-        } else {
-            $collection.children().remove();
         }
     })
     .change();

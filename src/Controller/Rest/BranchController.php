@@ -30,16 +30,9 @@ class BranchController extends FOSRestController
     {
         $content = json_decode($request->getContent(), true);
         $name = $content['name'];
-        $user_id = $content['user_id'];
 
-        $checker = $this->checkerService->userChecker($user_id);
-
-        $result= array();
-        if ($checker['status']) {
-            $user = $checker['user'];
-            $result = $this->branchService->createBranch($name, $user);
-        }
-    
+        $result = $this->branchService->createBranch($name);
+        
         return View::create($result, Response::HTTP_CREATED);
     }
 
@@ -79,32 +72,25 @@ class BranchController extends FOSRestController
         $content = json_decode($request->getContent(), true);
         $id = $content['id'];
         $name = $content['name'];
-        $user_id = $content['user_id'];
+        
+        $result = $this->branchService->editBranch($id, $name);
 
-        $checker = $this->checkerService->userChecker($user_id);
-
-        $result= array();
-        if ($checker['status']) {
-            $user = $checker['user'];
-            $result = $this->branchService->editBranch($id, $name, $user);
-        }
-    
         return View::create($result, Response::HTTP_CREATED);
     }
 
     /**
      * @Rest\Get("/survey/branch")
      */
-    public function getUserBranches(Request $request): View
+    public function getBusinessBranches(Request $request): View
     {
         $content = json_decode($request->getContent(), true);
-        $id = $content['user_id'];
-        $checker = $this->checkerService->userChecker($id);
+        $id = $content['business_id'];
+        $checker = $this->checkerService->businessChecker($id);
 
         $branches= array();
         if ($checker['status']) {
-            $user = $checker['user'];
-            $branches = $this->branchService->getUserbranches($user);
+            $business = $checker['business'];
+            $branches = $this->branchService->getBusinessBranches($business);
         }
         
         return View::create($branches, Response::HTTP_CREATED);

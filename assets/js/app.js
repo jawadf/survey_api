@@ -14,5 +14,6 @@ require('../css/app.css');
  const $ = require('jquery');
 
 require('./add-collection-widget.js');
+require('./surveys-page.js');
 
 console.log('Hello Webpack Encore! Edit me in assets/js/app.js');

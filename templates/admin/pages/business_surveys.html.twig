@@ -23,7 +23,7 @@
 				<i class="kt-font-brand flaticon2-line-chart"></i>
 			</span>
                 <h3 class="kt-portlet__head-title">
-				Surveys of user with id: {{ user_id }}
+				Surveys of user with id: {{ business_id }}
 			</h3>
             </div>
             <div class="kt-portlet__head-toolbar">
@@ -54,7 +54,7 @@
                                     <a href="#" class="kt-nav__link">
                                         <i class="kt-nav__link-icon flaticon2-bell-alarm-symbol"></i>
                                         <span class="kt-nav__link-text">Reminders</span>
-                                    </a>
+                                    </a> 
                                 </li>
                                 <li class="kt-nav__item">
                                     <a href="#" class="kt-nav__link">
@@ -149,10 +149,72 @@
             <!--end: Search Form -->
         </div>
         <div class="kt-portlet__body kt-portlet__body--fit">
-            <!--begin: Datatable -->
-            <div class="kt-datatable" id="local_data" data-all-surveys="{% if user_surveys == true %} {{ user_surveys}} {% endif %}"></div>
-            <!--end: Datatable 
-        -->
+            {# <!--begin: Datatable -->
+            <div class="kt-datatable" id="local_data" data-all-surveys="{% if business_surveys == true %} {{ business_surveys}} {% endif %}"></div>
+            <!--end: Datatable --> #}
+
+             <!--begin: Datatable -->
+            <table class="table table-striped- table-bordered table-hover table-checkable" id="kt_table_1">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Format</th>
+                        <th>Business</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                    <tbody>
+                    {% for survey in business_surveys %}
+                    <tr>
+                        <td>{{ survey.id }}</td>
+                        <td>{{ survey.name }}</td>
+                        <td>{{ survey.description }}</td>
+                        <td>{{ survey.format }}</td>
+                        <td>{{ survey.business.name }}</td>
+                        <td>      
+                            <a href="/admin/survey/{{ survey.id }}/edit" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit details">
+                                <i class="la la-edit"></i>
+                            </a>
+                            <button data-toggle="modal" data-target="#kt_modal_6" data-survey-id="{{ survey.id }}" data-survey-name="{{ survey.name }}" class="delete--button btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete">
+                                <i class="la la-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                                          
+                    {% endfor %}
+                </tbody>
+            </table>
+            <!--end: Datatable -->
+            <!--begin: Modal -->
+            <div class="modal fade" id="kt_modal_6" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want to delete survey: <span class="survey-to-delete"></span> ?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>If you click on 'Delete', your survey will be permanently deleted and all the relevant data will be removed as well. Make sure you really want to delete, or else you will not be able to restore it.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <a class="path-to-delete">
+                                <button type="button" class="btn btn-primary">Delete</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end: Modal -->
+            <!--begin: Navigation -->
+            <div class="navigation">
+                                  {{ knp_pagination_render(business_surveys) }}  
+            </div>
+            <!--end: Navigation -->
+
         </div>
     </div>
 

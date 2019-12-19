@@ -30,13 +30,14 @@ class Branch
     private $survey;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="branches")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Business", mappedBy="branches")
      */
-    private $user;
+    private $businesses;
 
     public function __construct()
     {
         $this->survey = new ArrayCollection();
+        $this->businesses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -82,14 +83,30 @@ class Branch
         return $this;
     }
 
-    public function getUser(): ?User
+    /**
+     * @return Collection|Business[]
+     */
+    public function getBusinesses(): Collection
     {
-        return $this->user;
+        return $this->businesses;
     }
 
-    public function setUser(?User $user): self
+    public function addBusiness(Business $business): self
     {
-        $this->user = $user;
+        if (!$this->businesses->contains($business)) {
+            $this->businesses[] = $business;
+            $business->addBranch($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBusiness(Business $business): self
+    {
+        if ($this->businesses->contains($business)) {
+            $this->businesses->removeElement($business);
+            $business->removeBranch($this);
+        }
 
         return $this;
     }

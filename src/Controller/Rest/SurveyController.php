@@ -27,16 +27,16 @@ class SurveyController extends FOSRestController
     /**
      * @Rest\Get("/survey")
      */
-    public function getUserSurveys(Request $request): View
+    public function getBusinessSurveys(Request $request): View
     {
         $content = json_decode($request->getContent(), true);
-        $id = $content['user_id'];
-        $checker = $this->checkerService->userChecker($id);
+        $id = $content['business_id'];
+        $checker = $this->checkerService->businessChecker($id);
 
         $surveys= array();
         if ($checker['status']) {
-            $user = $checker['user'];
-            $surveys = $this->surveyService->getUserSurveys($user);
+            $business = $checker['business'];
+            $surveys = $this->surveyService->getBusinessSurveys($business);
         }
         
         return View::create($surveys, Response::HTTP_CREATED);
@@ -51,14 +51,14 @@ class SurveyController extends FOSRestController
         $name = $content['name'];
         $description = $content['description'];
         $format = $content['format'];
-        $user_id = $content['user_id'];
+        $business_id = $content['business_id'];
  
-        $checker = $this->checkerService->userChecker($user_id);
+        $checker = $this->checkerService->businessChecker($business_id);
 
         $result = array();
         if ($checker['status']) {
-            $user = $checker['user'];
-            $result = $this->surveyService->createSurvey($name, $description, $format, $user);
+            $business = $checker['business'];
+            $result = $this->surveyService->createSurvey($name, $description, $format, $business);
         }
     
         return View::create($result, Response::HTTP_CREATED);
@@ -105,14 +105,14 @@ class SurveyController extends FOSRestController
         $name = $content['name'];
         $description = $content['description'];
         $format = $content['format'];
-        $user_id = $content['user_id'];
+        $business_id = $content['business_id'];
 
-        $checker = $this->checkerService->userChecker($user_id);
+        $checker = $this->checkerService->businessChecker($business_id);
 
         $result = array();
         if ($checker['status']) {
-            $user = $checker['user'];
-            $result = $this->surveyService->editSurvey($id, $name, $description, $format, $user);
+            $business = $checker['business'];
+            $result = $this->surveyService->editSurvey($id, $name, $description, $format, $business);
         }
     
         return View::create($result, Response::HTTP_CREATED);

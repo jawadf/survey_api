@@ -3,7 +3,7 @@
 namespace App\Service; 
 
 use App\Entity\Survey;
-use App\Entity\User;
+use App\Entity\Business;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 
@@ -23,14 +23,14 @@ class SurveyService
      * 
      * Acceptable formats: 'one-question-per-screen', 'all-questions-one-screen'
      */
-    public function createSurvey(string $name, string $description, string $format, User $user)
+    public function createSurvey(string $name, string $description, string $format, Business $business)
     {
         $return = array();
         if($name && $format) {
             $survey = new Survey();
             $survey->setName($name);
             $survey->setFormat($format);
-            $survey->setUser($user);
+            $survey->setBusiness($business);
             if($description != '0') {
                 $survey->setDescription($description);
             } else {
@@ -46,7 +46,7 @@ class SurveyService
                 'name' => $survey->getName(),
                 'description' => $survey->getDescription(),
                 'format' => $survey->getFormat(),
-                'user_id' => $survey->getUser()->getId()
+                'business_id' => $survey->getBusiness()->getId()
                 ];
         } else {
             $return = [
@@ -59,7 +59,7 @@ class SurveyService
     }
 
     /**
-     * GET ALL THE SURVEYS OF ALL USERS
+     * GET ALL THE SURVEYS OF ALL BusinessS
      */
     public function getAllSurveys()
     { 
@@ -80,7 +80,7 @@ class SurveyService
                'name' => $oneSurvey->getName(),
                'description' => $oneSurvey->getDescription(),
                'format' => $oneSurvey->getFormat(),
-               'user_id' => $oneSurvey->getUser()->getId(),
+               'business_id' => $oneSurvey->getBusiness()->getId(),
                'questions' => sizeof($questions),
                'branches' => $branches
             ];
@@ -91,12 +91,12 @@ class SurveyService
 
 
     /**
-     * GET ALL THE SURVEYS OF A SPECIFIC USER
+     * GET ALL THE SURVEYS OF A SPECIFIC Business
      */
-    public function getUserSurveys($user)
+    public function getBusinessSurveys($business)
     { 
         $result = $this->surveyRepository->findBy(
-            ['user' => $user]
+            ['business' => $business]
         );
 
         $surveys = array();
@@ -108,7 +108,7 @@ class SurveyService
                'name' => $oneSurvey->getName(),
                'description' => $oneSurvey->getDescription(),
                'format' => $oneSurvey->getFormat(),
-               'user_id' => $oneSurvey->getUser()->getId(),
+               'business_id' => $oneSurvey->getBusiness()->getId(),
                'questions' => sizeof($questions)
             ];
         }
@@ -138,24 +138,24 @@ class SurveyService
     //         ];
     //     }
 
-    //     echo json_encode($surveys);
+    //     echo json_encode($surveys); 
     // }
 
 
     /**
      * EDIT A SURVEY
      */
-    public function editSurvey(int $id, string $name, string $description, string $format, User $user)
+    public function editSurvey(int $id, string $name, string $description, string $format, Business $business)
     {
         $survey = $this->surveyRepository->find($id);
         $return = array();
         if($survey) {
-            if($name && $description && $format && $user) {
+            if($name && $description && $format && $business) {
            
                 $survey->setName($name);
                 $survey->setDescription($description);
                 $survey->setFormat($format);
-                $survey->setUser($user);
+                $survey->setBusiness($business);
 
                 $this->entityManager->persist($survey);
                 $this->entityManager->flush();
@@ -167,7 +167,7 @@ class SurveyService
                     'name' => $survey->getName(),
                     'description' => $survey->getDescription(),
                     'format' => $survey->getFormat(),
-                    'user_id' => $survey->getUser()->getId()
+                    'business_id' => $survey->getBusiness()->getId()
                     ];
             } else {
                 $return = [
@@ -194,7 +194,7 @@ class SurveyService
                 'name' => $survey->getName(),
                 'description' => $survey->getDescription(),
                 'format' => $survey->getFormat(),
-                'user_id' => $survey->getUser()->getId()
+                'business_id' => $survey->getBusiness()->getId()
             ];
         } else {
             $return[] = [

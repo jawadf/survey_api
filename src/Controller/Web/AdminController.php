@@ -4,9 +4,14 @@ namespace App\Controller\Web;
 
 use App\Entity\Survey;
 use App\Entity\Question;
+use App\Entity\Business;
 use App\Entity\User;
+use App\Entity\Manager;
+use App\Entity\Employee;
 use App\Service\SurveyService;
 use App\Service\UserService;
+use App\Service\BusinessService;
+use App\Service\UploadImageService;
 use App\Form\Type\SurveyType;
 use App\Form\Type\DeleteType;
 use App\Repository\UserRepository;
@@ -14,6 +19,7 @@ use App\Form\RegistrationFormType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Security\LoginFormAuthenticator;
 use Knp\Component\Pager\PaginatorInterface;
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
@@ -25,11 +31,13 @@ class AdminController extends AbstractController
 {
     private $surveyService;
     private $userService;
+    private $businessService;
 
-    public function __construct(SurveyService $surveyService, UserService $userService)
+    public function __construct(SurveyService $surveyService, UserService $userService, BusinessService $businessService)
     {
-        $this->surveyService = $surveyService;
-        $this->userService = $userService;
+      $this->surveyService = $surveyService;
+      $this->userService = $userService;
+      $this->businessService = $businessService;
     }
 
     // /**
@@ -40,30 +48,26 @@ class AdminController extends AbstractController
     //     return $this->render('admin/base.html.twig');
     // }
 
-      /**************************************************
-      *                 
-      *               SURVEY METHODS
-      * 
-      **************************************************/
+    /**************************************************
+    *                 
+    *               SURVEY METHODS
+    * 
+    **************************************************/
 
     /**
       * @Route("/admin", name="admin_surveys")
       */
-    public function surveyPage(PaginatorInterface $paginator, Request $request)
+    public function surveyPage(PaginatorInterface $paginator, Request $request, EntityManagerInterface $entityManager)
     {
-        //$allSurveys  = $this->surveyService->getAllSurveys();
-        //$allUsers  = $this->userService->getAllUsers();
-
-        $entityManager = $this->getDoctrine()->getManager();
 
         $surveysQuery = $entityManager->createQuery(
           'SELECT survey
           FROM App\Entity\Survey survey'
         );
 
-        $usersQuery = $entityManager->createQuery(
-          'SELECT user
-          FROM App\Entity\User user'
+        $businessesQuery = $entityManager->createQuery(
+          'SELECT business
+          FROM App\Entity\Business business'
         );
 
         $allSurveys = $paginator->paginate(
@@ -72,29 +76,29 @@ class AdminController extends AbstractController
           12/*limit per page*/
         );
 
-        $pagination = $paginator->paginate(
-          $usersQuery, /* query NOT result */
+        $allBusinesses = $paginator->paginate(
+          $businessesQuery, /* query NOT result */
           $request->query->getInt('page', 1)/*page number*/,
           8/*limit per page*/
         );
 
         return $this->render('admin/pages/surveys.html.twig', [
             'all_surveys' => $allSurveys,
-            'pagination' => $pagination
+            'all_businesses' => $allBusinesses
         ]);
     }
 
     /**
       * @Route("/admin/survey/create", name="admin_create_survey")
       */
-      public function createNewSurvey(Request $request)
+      public function createNewSurvey(Request $request, EntityManagerInterface $entityManager)
       {
           $survey = new Survey();
           $newQuestion = new Question();
           $survey->addQuestion($newQuestion);
 
-          //Get users
-          $allUsers  = $this->userService->getAllUsers();
+          //Get all Business
+          $allBusinesses  = $this->businessService->getAllBusinesses();
 
           $form = $this->createForm(SurveyType::class, $survey);
      
@@ -113,7 +117,6 @@ class AdminController extends AbstractController
                 $branch->addSurvey($survey);
               }
   
-              $entityManager = $this->getDoctrine()->getManager();
               $entityManager->persist($survey);
               $entityManager->flush();
   
@@ -122,19 +125,25 @@ class AdminController extends AbstractController
       
           return $this->render('admin/pages/create_survey.html.twig', [
               'form' => $form->createView(),
-              'all_users' => $allUsers
+              'all_businesses' => $allBusinesses
           ]);
       }
   
       /**
         * @Route("/admin/survey/{id}/edit", name="admin_edit_survey")
         */
-        public function editSurvey(Survey $survey, Request $request, $id)
+        public function editSurvey(Survey $survey, Request $request, $id, EntityManagerInterface $entityManager)
         {
-            $entityManager = $this->getDoctrine()->getManager();
+
             if (null === $survey = $entityManager->getRepository(Survey::class)->find($id)) {
                 throw $this->createNotFoundException('No survey found for id '.$id);
             }
+
+            //Get all Business
+            $allBusinesses  = $this->businessService->getAllBusinesses();
+
+            //Selected business, to use as a placeholder
+            $selectedBusiness = $survey ->getBusiness()->getName();
   
             $form = $this->createForm(SurveyType::class, $survey);
   
@@ -159,7 +168,7 @@ class AdminController extends AbstractController
 
             $questions = $survey->getQuestions();
             $branches = $survey->getBranches();
-
+            
             foreach ($questions as $question) {
               $question->setSurvey($survey);
             }
@@ -181,7 +190,9 @@ class AdminController extends AbstractController
             } 
   
           return $this->render('admin/pages/edit_survey.html.twig', [
-              'form' => $form->createView()
+              'form' => $form->createView(),
+              'all_businesses' => $allBusinesses,
+              'selected_business' => $selectedBusiness
           ]);
   
         }
@@ -189,12 +200,10 @@ class AdminController extends AbstractController
     /**
       * @Route("/admin/survey/{id}/delete", name="admin_delete_survey")
       */
-      public function deleteSurvey($id)
+      public function deleteSurvey($id, EntityManagerInterface $entityManager)
       {
         $allSurveys  = $this->surveyService->getAllSurveys();
-        $allUsers  = $this->userService->getAllUsers();
-    
-        $entityManager = $this->getDoctrine()->getManager();
+
         $surveyRepository = $entityManager->getRepository(Survey::class);
 
         /***********  To tackle foreign key constraints ************/
@@ -217,16 +226,28 @@ class AdminController extends AbstractController
       }
 
     /**
-     * @Route("/admin/survey/user/{id}", name="admin_user_surveys")
+     * @Route("/admin/survey/business/{id}", name="admin_business_surveys")
      */
-    public function manageUserSurveys($id)
+    public function manageBusinessSurveys($id, PaginatorInterface $paginator, Request $request, EntityManagerInterface $entityManager)
     {
-        $user = $this->userService->getUserObject($id);
-        $userSurveys  = $this->surveyService->getUserSurveys($user);
+        $business = $this->businessService->getBusinessObject($id);
+        // $businessSurveys  = $this->surveyService->getBusinessSurveys($business);
 
-        return $this->render('admin/pages/user_surveys.html.twig', [
-            'user_surveys' => $userSurveys,
-            'user_id' => $id
+        $query = $entityManager->createQuery(
+          'SELECT survey
+          FROM App\Entity\Survey survey
+          WHERE survey.business ='.$business->getId()
+        );
+
+        $businessSurveys = $paginator->paginate(
+          $query, /* query NOT result */
+          $request->query->getInt('page', 1)/*page number*/,
+          8/*limit per page*/
+        );
+
+        return $this->render('admin/pages/business_surveys.html.twig', [
+            'business_surveys' => $businessSurveys,
+            'business_id' => $id
         ]);
     }
 
@@ -239,28 +260,44 @@ class AdminController extends AbstractController
     /**
       * @Route("/admin/user", name="admin_users")
       */
-    public function usersPage(PaginatorInterface $paginator, Request $request) 
+    public function usersPage(PaginatorInterface $paginator, Request $request, EntityManagerInterface $entityManager) 
     {
-      $allUsers  = $this->userService->getAllUsers();
+      //$allUsers  = $this->userService->getAllUsers();
 
-      $pagination = $paginator->paginate(
-        $allUsers, /* query NOT result */
+      $managersQuery = $entityManager->createQuery(
+        'SELECT manager 
+        FROM  App\Entity\Manager manager'
+      );
+
+      $employeesQuery = $entityManager->createQuery(
+        'SELECT employee 
+        FROM  App\Entity\Employee employee'
+      );
+
+      $managers = $paginator->paginate(
+        $managersQuery, /* query NOT result */
+        $request->query->getInt('page', 1)/*page number*/,
+        10/*limit per page*/
+      );
+
+      $employees = $paginator->paginate(
+        $employeesQuery, /* query NOT result */
         $request->query->getInt('page', 1)/*page number*/,
         10/*limit per page*/
       );
 
       return $this->render('admin/pages/users.html.twig', [
-        'pagination' => $pagination
+        'managers' => $managers,
+        'employees' => $employees
       ]);
     }
-
 
     /**
      * @Route("/admin/user/create", name="admin_create_user")
      */
-    public function addUser(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
+    public function addUser(Request $request, UploadImageService $uploadImageService, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
     {
-        $user = new User();
+        $user = new Manager();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
@@ -275,7 +312,15 @@ class AdminController extends AbstractController
             $user->setRoles(["ROLE_USER"]);
             $user->setToken(md5(uniqid(rand(), true)));
 
-            $entityManager = $this->getDoctrine()->getManager();
+            // Upload image
+            //$picture = $user->getPicture();
+            dump($request->files->get('registration_form')['upload']);
+            $uploaded = $request->files->get('registration_form')['upload'];
+            if($uploaded) {
+                 // Upload the image using a Service
+                 $uploadImageService->upload($request, $user);
+            }
+
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -299,11 +344,9 @@ class AdminController extends AbstractController
     /**
       * @Route("/admin/user/{id}/edit", name="admin_edit_user")
       */
-      public function editUser(Request $request, $id, User $user)
+      public function editUser(Request $request, $id, Manager $user, EntityManagerInterface $entityManager)
       {
-
-        $entityManager = $this->getDoctrine()->getManager();
-        if (null === $user = $entityManager->getRepository(User::class)->find($id)) {
+        if (null === $user = $entityManager->getRepository(Manager::class)->find($id)) {
             throw $this->createNotFoundException('No user found for id '.$id);
         }
 

@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Entity\Branch;
 use App\Entity\Survey;
-use App\Entity\User;
+use App\Entity\Business;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 
@@ -24,14 +24,13 @@ class BranchService
     /**
      * CREATE BRANCH
      */
-    public function createBranch(string $name, User $user)
+    public function createBranch(string $name)
     {
         $return = array();
-        if($name && $user) {
-            // Todo: check if there's already a branch with this user_id AND name
+        if($name) {
+            // Todo: check if there's already a branch with this business_id AND name
             $branch = new Branch();
             $branch->setName($name);
-            $branch->setUser($user);
 
             $this->entityManager->persist($branch);
             $this->entityManager->flush();
@@ -41,7 +40,6 @@ class BranchService
                 'message' => 'Branch successfully created!',
                 'id' => $branch->getId(),
                 'name' => $branch->getName(),
-                'user_id' => $branch->getUser()->getId(),
                 ];
         } else {
             $return = [
@@ -114,15 +112,14 @@ class BranchService
     /**
      * EDIT BRANCH
      */
-    public function editBranch(int $id,string $name, User $user)
+    public function editBranch(int $id,string $name)
     {
         $branch = $this->branchRepository->find($id);
 
         if($branch) {
             $return = array();
-            if($name && $user) {
+            if($name) {
                 $branch->setName($name);
-                $branch->setUser($user);
     
                 $this->entityManager->persist($branch);
                 $this->entityManager->flush();
@@ -131,8 +128,7 @@ class BranchService
                     'success' => 1,
                     'message' => 'Branch successfully edited!',
                     'id' => $branch->getId(),
-                    'name' => $branch->getName(),
-                    'user_id' => $branch->getUser()->getId(),
+                    'name' => $branch->getName()
                     ];
             } else {
                 $return = [
@@ -160,7 +156,7 @@ class BranchService
             $return[] = [
                 'success' => 1,
                 'message' => 'Branch successfully deleted!'
-            ];
+            ]; 
         } else {
             $return[] = [
                 'success' => 0,
@@ -172,19 +168,19 @@ class BranchService
 
 
     /**
-     * GET ALL THE BRANCHES OF A SPECIFIC USER
+     * GET ALL THE BRANCHES OF A SPECIFIC Business
      */
-    public function getUserBranches($user)
+    public function getBusinessBranches($business)
     {
         $result = $this->branchRepository->findBy(
-            ['user' => $user]
+            ['business' => $business]
         );
         $branches = array();
         foreach ($result as $oneBranch) {
             $branches[] = [
                 'id' => $oneBranch->getId(),
                 'name' => $oneBranch->getName(),
-                'user_id' => $oneBranch->getUser()->getId(),
+                'business_id' => $oneBranch->getBusiness()->getId(),
             ];
         }
         echo json_encode($branches);

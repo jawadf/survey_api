@@ -156,7 +156,7 @@
                         <th>Name</th>
                         <th>Description</th>
                         <th>Format</th>
-                        <th>User</th>
+                        <th>Business</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -167,47 +167,43 @@
                         <td>{{ survey.name }}</td>
                         <td>{{ survey.description }}</td>
                         <td>{{ survey.format }}</td>
-                        <td>{{ survey.user.fullname }}</td>
+                        <td>{{ survey.business.name }}</td>
                         <td>      
                             <a href="/admin/survey/{{ survey.id }}/edit" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit details">
                                 <i class="la la-edit"></i>
                             </a>
-                            <button data-toggle="modal" data-target="#kt_modal_6" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete">
+                            <button data-toggle="modal" data-target="#kt_modal_6" data-survey-id="{{ survey.id }}" data-survey-name="{{ survey.name }}" class="delete--button btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete">
                                 <i class="la la-trash"></i>
                             </button>
-                            <!-- Modal -->
-                            <div class="modal fade" id="kt_modal_6" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                        
-                                            <h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want to delete survey: {{ survey.name }}<?</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>If you click on 'Delete', your survey will be permanently deleted and all the relevant data will be removed as well. Make sure you really want to delete, or else you will not be able to restore it.</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <a href="/admin/survey/{{ survey.id }}/delete">
-                                                <button type="button" class="btn btn-primary">Delete</button>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> 
-
                         </td>
                     </tr>
-
-
-     
                                           
                     {% endfor %}
                 </tbody>
             </table>
             <!--end: Datatable -->
+            <!--begin: Modal -->
+            <div class="modal fade" id="kt_modal_6" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Are you sure you want to delete survey: <span class="survey-to-delete"></span> ?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>If you click on 'Delete', your survey will be permanently deleted and all the relevant data will be removed as well. Make sure you really want to delete, or else you will not be able to restore it.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <a class="path-to-delete">
+                                <button type="button" class="btn btn-primary">Delete</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end: Modal -->
             <!--begin: Navigation -->
             <div class="navigation">
                                   {{ knp_pagination_render(all_surveys) }}  
@@ -373,7 +369,7 @@
         <!--Begin::Section-->
         <div class="row">
 
-            {% for user in pagination %}
+            {% for business in all_businesses %}
           
             <div class="col-xl-3">
                 <!--Begin::Portlet-->
@@ -419,7 +415,7 @@
 
                                 <div class="kt-widget__info">
                                 <a href="#" class="kt-widget__username">
-                                {{ user.fullname }}                                          
+                                {{ business.name }}                                          
                                 </a>
 
                                     <span class="kt-widget__desc">
@@ -435,8 +431,8 @@
 
                                 <div class="kt-widget__item">
                                     <div class="kt-widget__contact">
-                                        <span class="kt-widget__label">Email:</span>
-                                        <a href="#" class="kt-widget__data">{{ user.email }}</a>
+                                        <span class="kt-widget__label">Business ID:</span>
+                                        <a href="#" class="kt-widget__data">{{ business.id }}</a>
                                     </div>
                                     <div class="kt-widget__contact">
                                         <span class="kt-widget__label">Phone:</span>
@@ -450,7 +446,7 @@
                             </div>
 
                             <div class="kt-widget__footer">
-                                <a href="{{ path('admin_user_surveys', {id: user.id})  }}"><button type="button"   class="btn btn-label-warning btn-lg btn-upper">Manage surveys</button></a>
+                                <a href="{{ path('admin_business_surveys', {id: business.id})  }}"><button type="button"   class="btn btn-label-warning btn-lg btn-upper">Manage surveys</button></a>
                                  {# // style="color: white"  #}
                             </div>
                         </div>
@@ -473,7 +469,7 @@
                         <!--begin: Pagination-->
                         <!--begin: Navigation -->
                             <div class="navigation">
-                                {{ knp_pagination_render(pagination) }}  
+                                {{ knp_pagination_render(all_businesses) }}  
                             </div>
                         <!--end: Navigation -->
                         {# <div class="kt-pagination kt-pagination--brand">
