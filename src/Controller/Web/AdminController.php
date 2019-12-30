@@ -26,6 +26,7 @@ use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use Symfony\Component\Filesystem\Filesystem;
 
 class AdminController extends AbstractController
 {
@@ -133,16 +134,15 @@ class AdminController extends AbstractController
         * @Route("/admin/survey/{id}/edit", name="admin_edit_survey")
         */
         public function editSurvey(Survey $survey, Request $request, $id, EntityManagerInterface $entityManager)
-        {
-
+        {          
             if (null === $survey = $entityManager->getRepository(Survey::class)->find($id)) {
-                throw $this->createNotFoundException('No survey found for id '.$id);
+              throw $this->createNotFoundException('No survey found for id '.$id);
             }
 
-            //Get all Business
+            // Get all Business
             $allBusinesses  = $this->businessService->getAllBusinesses();
 
-            //Selected business, to use as a placeholder
+            // Selected business, to use as a placeholder
             $selectedBusiness = $survey ->getBusiness()->getName();
   
             $form = $this->createForm(SurveyType::class, $survey);
@@ -239,6 +239,8 @@ class AdminController extends AbstractController
           WHERE survey.business ='.$business->getId()
         );
 
+        
+
         $businessSurveys = $paginator->paginate(
           $query, /* query NOT result */
           $request->query->getInt('page', 1)/*page number*/,
@@ -262,7 +264,7 @@ class AdminController extends AbstractController
       */
     public function usersPage(PaginatorInterface $paginator, Request $request, EntityManagerInterface $entityManager) 
     {
-      //$allUsers  = $this->userService->getAllUsers();
+      // $allUsers  = $this->userService->getAllUsers();
 
       $managersQuery = $entityManager->createQuery(
         'SELECT manager 
@@ -300,6 +302,7 @@ class AdminController extends AbstractController
         $user = new Manager();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
+    
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
@@ -313,8 +316,6 @@ class AdminController extends AbstractController
             $user->setToken(md5(uniqid(rand(), true)));
 
             // Upload image
-            //$picture = $user->getPicture();
-            dump($request->files->get('registration_form')['upload']);
             $uploaded = $request->files->get('registration_form')['upload'];
             if($uploaded) {
                  // Upload the image using a Service
@@ -333,7 +334,7 @@ class AdminController extends AbstractController
             //     'admin_secured_area' // firewall name in security.yaml
             // );
 
-            return $this->redirectToRoute('admin_create_user');
+            return $this->redirectToRoute('admin_users');
         }
 
         return $this->render('admin/pages/create_user.html.twig', [
@@ -344,26 +345,40 @@ class AdminController extends AbstractController
     /**
       * @Route("/admin/user/{id}/edit", name="admin_edit_user")
       */
-      public function editUser(Request $request, $id, Manager $user, EntityManagerInterface $entityManager)
+      public function editUser(Request $request, $id, Manager $user, EntityManagerInterface $entityManager, UploadImageService $uploadImageService)
       {
         if (null === $user = $entityManager->getRepository(Manager::class)->find($id)) {
             throw $this->createNotFoundException('No user found for id '.$id);
         }
 
+        // Get the picture
+        $originalPicture = $user->getPicture();
+        
         $form = $this->createForm(RegistrationFormType::class, $user);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-          $user= $form->getData();
+          $formData= $form->getData();
+          $uploaded = $request->files->get('registration_form')['upload']; // Get, if any, the uploaded files
+          
+          
+          if ($uploaded) { // check if the user changed the photo
+            if($originalPicture != "") {
+              unlink("uploads_directory/".$originalPicture); // Remove the old image file IF it exits
+            }
+            $uploadImageService->upload($request, $user); // Upload the new image using a Service
+          }
 
           $entityManager->persist($user);
           $entityManager->flush();
           return $this->redirectToRoute('admin_users');
     
         } 
-          return $this->render('admin/pages/edit_user.html.twig', [
-            'edituser_form' => $form->createView()
+
+          return $this->render('admin/pages/edit_user.html.twig', [ // MUST ADD CSFR TOKEN FOR THE HIDDEN PASSWORD INPUT 
+            'edituser_form' => $form->createView(),
+            'picture' => $originalPicture
           ]);
       }
   
@@ -375,6 +390,23 @@ class AdminController extends AbstractController
     {
         return $this->render('admin/pages/test.html.twig');
     }
+
+
+    /**************************************************
+      *                 
+      *                BUSINESS METHODS
+      * 
+    **************************************************/
+
+    /**
+      * @Route("/admin/business", name="admin_businesses")
+      */
+      public function businessesPage(PaginatorInterface $paginator, Request $request, EntityManagerInterface $entityManager) 
+      {
+
+        return $this->render('admin/pages/businesses.html.twig');
+
+      }
 
 
 }

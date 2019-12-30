@@ -1,0 +1,20 @@
+{% extends "admin/base.html.twig" %} 
+
+{% block assets_path %}../../{% endblock %}
+{% block businesses_active %}kt-menu__item--active{% endblock %} 
+{% block subheader_title %}Manage Companies{% endblock %}
+{% block page_scripts %}
+ <!--begin:: Page Vendors(used by this page) -->
+<script src="./assets/vendors/custom/datatables/datatables.bundle.js" type="text/javascript"></script>
+<!--end::Page Vendors -->
+
+<!--begin:: Page Scripts(used by this page) -->
+<script src="./assets/js/demo7/pages/crud/datatables/data-sources/html.js" type="text/javascript"></script>
+<!--end::Page Scripts -->
+{% endblock %}
+{% block page_styles %}<link href="./assets/vendors/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />{% endblock %}
+ 
+
+{% block content %}
+
+{% endblock %}

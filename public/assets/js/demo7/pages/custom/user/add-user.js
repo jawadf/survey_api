@@ -17,11 +17,11 @@ var KTUserAdd = function () {
 		});
 
 		// Validation before going to next page
-		wizard.on('beforeNext', function(wizardObj) {
-			if (validator.form() !== true) {
-				wizardObj.stop();  // don't go to the next step
-			}
-		})
+		// wizard.on('beforeNext', function(wizardObj) {
+		// 	if (validator.form() !== true) {
+		// 		wizardObj.stop();  // don't go to the next step
+		// 	}
+		// })
 
 		// Change event
 		wizard.on('change', function(wizard) {
@@ -76,7 +76,7 @@ var KTUserAdd = function () {
 	}
 
 	var initSubmit = function() {
-		var btn = formEl.find('[data-ktwizard-type="action-submit"]');
+		var btn = formEl.find('[data-js="submit-button"]');
 
 		btn.on('click', function(e) {
 			e.preventDefault();
@@ -94,7 +94,7 @@ var KTUserAdd = function () {
 
 						swal.fire({
 							"title": "", 
-							"text": "The application has been successfully submitted!", 
+							"text": "Success!", 
 							"type": "success",
 							"confirmButtonClass": "btn btn-secondary"
 						});

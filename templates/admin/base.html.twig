@@ -216,6 +216,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	<div id="kt_header_menu" class="kt-header-menu kt-header-menu-mobile  kt-header-menu--layout- "  >
 		<ul class="kt-menu__nav ">
             <li class="kt-menu__item {% block surveys_active %}{% endblock %}" aria-haspopup="true"><a href="{{ path('admin_surveys') }}" class="kt-menu__link "><span class="kt-menu__link-text">Surveys</span></a></li>
+            <li class="kt-menu__item {% block businesses_active %}{% endblock %} " aria-haspopup="true"><a href="{{ path('admin_businesses') }}" class="kt-menu__link "><span class="kt-menu__link-text">Companies</span></a></li>
             <li class="kt-menu__item {% block users_active %}{% endblock %} " aria-haspopup="true"><a href="{{ path('admin_users') }}" class="kt-menu__link "><span class="kt-menu__link-text">Users</span></a></li>
         </ul>
 	</div>
