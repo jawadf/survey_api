@@ -52,6 +52,11 @@ class Survey
      * @ORM\ManyToOne(targetEntity="App\Entity\Business", inversedBy="surveys")
      */
     private $business;
+ 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $status;
 
 
     public function __construct()
@@ -180,6 +185,18 @@ class Survey
     public function setBusiness(?Business $business): self
     {
         $this->business = $business;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?string $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }

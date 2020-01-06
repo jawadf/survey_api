@@ -22,6 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Security\LoginFormAuthenticator;
 use Knp\Component\Pager\PaginatorInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -98,9 +99,6 @@ class AdminController extends AbstractController
           $newQuestion = new Question();
           $survey->addQuestion($newQuestion);
 
-          //Get all Business
-          $allBusinesses  = $this->businessService->getAllBusinesses();
-
           $form = $this->createForm(SurveyType::class, $survey);
      
           $form->handleRequest($request);
@@ -117,6 +115,9 @@ class AdminController extends AbstractController
               foreach ($branches as $branch) {
                 $branch->addSurvey($survey);
               }
+
+              // ensure that the survey's status is initiated as 'active'
+              $survey->setStatus('active');
   
               $entityManager->persist($survey);
               $entityManager->flush();
@@ -125,8 +126,7 @@ class AdminController extends AbstractController
           }
       
           return $this->render('admin/pages/create_survey.html.twig', [
-              'form' => $form->createView(),
-              'all_businesses' => $allBusinesses
+              'form' => $form->createView()
           ]);
       }
   
@@ -143,26 +143,35 @@ class AdminController extends AbstractController
             $allBusinesses  = $this->businessService->getAllBusinesses();
 
             // Selected business, to use as a placeholder
-            $selectedBusiness = $survey ->getBusiness()->getName();
-  
+            $selectedBusiness = "";
+            if ($survey->getBusiness()) {
+            $selectedBusiness = $survey->getBusiness()->getName();
+            }
+
+            $originalQuestions  = new ArrayCollection();
+            foreach ($survey->getQuestions() as $question) {
+              $originalQuestions->add($question);
+            }
+
             $form = $this->createForm(SurveyType::class, $survey);
   
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
+
+              $formData = $form->getData();
   
             // remove the relationship between the Question and the Survey
-            //  foreach ($originalImages as $image) {
-            //   if (false === $post->getImage()->contains($image)) {
-            //       // remove the Task from the Tag
-            //       //$image->getPost()->removeImage($post);
-            //       // if it was a many-to-one relationship, remove the relationship like this
-            //       // $image->setPost(null);
-            //       $entityManager->persist($image);
-            //       // if you wanted to delete the Tag entirely, you can also do that
-            //       $entityManager->remove($image);
-            //       $imagesDirectory = $this->getParameter('images_directory');
-            //       unlink($imagesDirectory.'/'.$image->getFilename());
-            //   }
+            foreach ($originalQuestions as $question) {
+              if (false === $formData->getQuestions()->contains($question)) {
+                // remove the Survey from the Question
+                $question->getSurvey()->removeQuestion($question);  
+
+                //$entityManager->persist($question);
+
+                // if you wanted to delete the Tag entirely, you can also do that
+                $entityManager->remove($question);
+              }
+            }
 
             $survey= $form->getData();
 
@@ -198,32 +207,88 @@ class AdminController extends AbstractController
         }
 
     /**
-      * @Route("/admin/survey/{id}/delete", name="admin_delete_survey")
+      * @Route("/admin/survey/{id}/activate", name="admin_activate_survey")
       */
-      public function deleteSurvey($id, EntityManagerInterface $entityManager)
+      public function activateSurvey($id, EntityManagerInterface $entityManager)
       {
-        $allSurveys  = $this->surveyService->getAllSurveys();
 
         $surveyRepository = $entityManager->getRepository(Survey::class);
-
-        /***********  To tackle foreign key constraints ************/
-        $questionsRepository = $entityManager->getRepository(Question::class);
         $survey = $surveyRepository->findOneBy([
           'id' => $id
         ]);
-        $questions = $questionsRepository->findBy([
-          'survey' => $survey
-        ]);
-        foreach ($questions as $question) {
-          $entityManager->remove($question);
-        }
-        /**********************************************************/
 
-        $entityManager->remove($survey);
+        $survey->setStatus('active');
+
+        $entityManager->persist($survey);
         $entityManager->flush();
 
         return $this->redirectToRoute('admin_surveys');
       }
+
+    /**
+      * @Route("/admin/survey/{id}/disable", name="admin_disable_survey")
+      */
+      public function disableSurvey($id, EntityManagerInterface $entityManager)
+      {
+
+        $surveyRepository = $entityManager->getRepository(Survey::class);
+        $survey = $surveyRepository->findOneBy([
+          'id' => $id
+        ]);
+
+        $survey->setStatus('disabled');
+
+        $entityManager->persist($survey);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('admin_surveys');
+      }
+
+    /**
+      * @Route("/admin/survey/{id}/delete", name="admin_delete_survey")
+      */
+      public function deleteSurvey($id, EntityManagerInterface $entityManager)
+      {
+        $surveyRepository = $entityManager->getRepository(Survey::class);
+        $survey = $surveyRepository->findOneBy([
+          'id' => $id
+        ]);
+
+        $survey->setStatus('deleted');
+
+        $entityManager->persist($survey);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('admin_surveys');
+      }
+      
+    // /**
+    //   * @Route("/admin/survey/{id}/delete", name="admin_delete_survey")
+    //   */
+    //   public function deleteSurvey($id, EntityManagerInterface $entityManager)
+    //   {
+    //     $allSurveys  = $this->surveyService->getAllSurveys();
+
+    //     $surveyRepository = $entityManager->getRepository(Survey::class);
+
+    //     /***********  To tackle foreign key constraints ************/
+    //     $questionsRepository = $entityManager->getRepository(Question::class);
+    //     $survey = $surveyRepository->findOneBy([
+    //       'id' => $id
+    //     ]);
+    //     $questions = $questionsRepository->findBy([
+    //       'survey' => $survey
+    //     ]);
+    //     foreach ($questions as $question) {
+    //       $entityManager->remove($question);
+    //     }
+    //     /**********************************************************/
+
+    //     $entityManager->remove($survey);
+    //     $entityManager->flush();
+
+    //     return $this->redirectToRoute('admin_surveys');
+    //   }
 
     /**
      * @Route("/admin/survey/business/{id}", name="admin_business_surveys")
@@ -238,8 +303,6 @@ class AdminController extends AbstractController
           FROM App\Entity\Survey survey
           WHERE survey.business ='.$business->getId()
         );
-
-        
 
         $businessSurveys = $paginator->paginate(
           $query, /* query NOT result */
@@ -303,7 +366,6 @@ class AdminController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
     
-
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
@@ -403,10 +465,34 @@ class AdminController extends AbstractController
       */
       public function businessesPage(PaginatorInterface $paginator, Request $request, EntityManagerInterface $entityManager) 
       {
+        $businessesQuery = $entityManager->createQuery(
+          'SELECT business
+          FROM App\Entity\Business business'
+        );
 
-        return $this->render('admin/pages/businesses.html.twig');
+        $allBusinesses = $paginator->paginate(
+          $businessesQuery, /* query NOT result */
+          $request->query->getInt('page', 1)/*page number*/,
+          8/*limit per page*/
+        );
 
+        return $this->render('admin/pages/businesses.html.twig', [
+          'all_businesses' => $allBusinesses
+        ]);
       }
+
+      /**
+       * @Route("/admin/business/create", name="admin_create_business")
+       */
+      public function addBusiness(Request $request)
+      {
+        
+
+
+        return $this->render('admin/pages/create_business.html.twig');
+      }
+
+
 
 
 }

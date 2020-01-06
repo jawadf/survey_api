@@ -162,6 +162,7 @@
                         <th>Description</th>
                         <th>Format</th>
                         <th>Business</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -173,6 +174,7 @@
                         <td>{{ survey.description }}</td>
                         <td>{{ survey.format }}</td>
                         <td>{{ survey.business.name }}</td>
+                        <td>{{ survey.status }}</td>
                         <td>      
                             <a href="/admin/survey/{{ survey.id }}/edit" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit details">
                                 <i class="la la-edit"></i>

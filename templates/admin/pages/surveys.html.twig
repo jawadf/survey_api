@@ -3,7 +3,7 @@
 {% block assets_path %}../{% endblock %} 
 {% block surveys_active %}kt-menu__item--active {% endblock %} 
 {% block users_active %}{% endblock %} 
-{% block subheader_title %}Manage Surveys{% endblock %} 
+{% block subheader_title %}Manage Surveys{% endblock %}
 {% block page_scripts %}<script src="./assets/js/demo7/pages/crud/metronic-datatable/base/data-local.js" type="text/javascript"></script>{% endblock %} 
 {% block content %}
 
@@ -157,24 +157,33 @@
                         <th>Description</th>
                         <th>Format</th>
                         <th>Business</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
-                    <tbody>
+                <tbody>
                     {% for survey in all_surveys %}
                     <tr>
                         <td>{{ survey.id }}</td>
                         <td>{{ survey.name }}</td>
                         <td>{{ survey.description }}</td>
                         <td>{{ survey.format }}</td>
-                        <td>{{ survey.business.name }}</td>
+                        <td>{% if survey.business == true %} {{ survey.business.name }} {% endif %}</td>
+                        <td>{{ survey.status }}</td>
                         <td>      
                             <a href="/admin/survey/{{ survey.id }}/edit" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Edit details">
                                 <i class="la la-edit"></i>
                             </a>
-                            <button data-toggle="modal" data-target="#kt_modal_6" data-survey-id="{{ survey.id }}" data-survey-name="{{ survey.name }}" class="delete--button btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete">
-                                <i class="la la-trash"></i>
-                            </button>
+                            {% if survey.status == 'active' %} 
+                                <button data-toggle="modal" data-target="#kt_modal_6" data-survey-id="{{ survey.id }}" data-survey-name="{{ survey.name }}" class="delete--button btn btn-sm btn-clean btn-icon btn-icon-md" title="Delete">
+                                    <i class="la la-trash"></i>
+                                </button>
+                            {% endif %}
+                            {% if survey.status == 'deleted' %} 
+                                <a href="{{ path('admin_activate_survey', {id: survey.id}) }}" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Activate Survey">
+                                    <i class="la la-check-circle"></i> 
+                                </a>
+                            {% endif %} 
                         </td>
                     </tr>
                                           
@@ -407,7 +416,8 @@
                         <div class="kt-widget kt-widget--user-profile-2">
                             <div class="kt-widget__head">
                                 <div class="kt-widget__media">
-                                    <img class="kt-widget__img kt-hidden-" src="./assets/media/users/default.jpg" alt="image">
+                                    <img class="kt-widget__img kt-hidden-" src="uploads_directory/{{business.name}}.jpg" alt="image">
+                                    {# <img class="kt-widget__img kt-hidden-" src="./assets/media/users/default.jpg" alt="image"> #}
                                     <div class="kt-widget__pic kt-widget__pic--success kt-font-success kt-font-boldest kt-hidden">
                                         ChS
                                     </div>

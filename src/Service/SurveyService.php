@@ -59,7 +59,7 @@ class SurveyService
     }
 
     /**
-     * GET ALL THE SURVEYS OF ALL BusinessS
+     * GET ALL THE SURVEYS OF ALL BUSINESSES
      */
     public function getAllSurveys()
     { 
@@ -80,6 +80,7 @@ class SurveyService
                'name' => $oneSurvey->getName(),
                'description' => $oneSurvey->getDescription(),
                'format' => $oneSurvey->getFormat(),
+               'status' => $oneSurvey->getStatus(),
                'business_id' => $oneSurvey->getBusiness()->getId(),
                'questions' => sizeof($questions),
                'branches' => $branches
@@ -91,7 +92,7 @@ class SurveyService
 
 
     /**
-     * GET ALL THE SURVEYS OF A SPECIFIC Business
+     * GET ALL THE SURVEYS OF A SPECIFIC BUSINESS
      */
     public function getBusinessSurveys($business)
     { 
@@ -108,6 +109,7 @@ class SurveyService
                'name' => $oneSurvey->getName(),
                'description' => $oneSurvey->getDescription(),
                'format' => $oneSurvey->getFormat(),
+               'status' => $oneSurvey->getStatus(),
                'business_id' => $oneSurvey->getBusiness()->getId(),
                'questions' => sizeof($questions)
             ];

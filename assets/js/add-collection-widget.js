@@ -21,13 +21,13 @@ jQuery(document).ready(function() {
     $collectionHolder.append($addQuestionDiv);
 
     // add a delete link to all of the existing tag form li elements
-    $collectionHolder.find('a.card-delete').each(function() {
-        addTagFormDeleteLink($(this));
+    $collectionHolder.find('.card').each(function() {
+        addQuestionFormDeleteLink($(this));
     });
 
-    // count the current form inputs we have (e.g. 2), use that as the new
+    // Count the current form inputs we have (e.g. 2), use that as the new
     // index when inserting a new item (e.g. 2)
-    $collectionHolder.data('index', $collectionHolder.find(':input').length);    
+    $collectionHolder.data('index', $collectionHolder.find(':input').length);  
 
     $addQuestionButton.on('click', function(e) {
         // add a new Question form 
@@ -38,56 +38,52 @@ jQuery(document).ready(function() {
     renderAnswerOptions($collectionHolder2, $addAnswerButton, $addAnswerDiv, 0);
 
     /************ Add jQuery UI's autocomplete functionality  *********/
-    var businesses = $('#survey_business').data("business");
-    var businessesArray = [];
-    businesses.forEach(element => {
-        businessesArray.push(element.name);
-    });
 
     $('#survey_business').autocomplete({ 
-        source: businessesArray,
-        autoFocus: true,
-        appendTo: ".ui-menu-item-wrapper",
-        classes: {
-            "ui-autocomplete": "highlight"
-          },
-        delay: 100, 
-        change: function( event, ui ) {
-              // Get the selected name from the "UI" input
-              var name = $('#survey_business').val();
+        source: function(request, response) {
+            /******  LIVE SEARCH   ******/
 
-              // find element with this name, get the id of that element
-              var relevantBusiness = businesses.find(el => el.name == name);
+             $.ajax({
+                url: "/api/business/names",
+                type: "GET",
+                dataType: "json",
+                data: {
+                    q: request.term
+                },
+                async: true,
+                success: function (data) { response( data ); }
+            });
 
-              // set the value of the "hidden" input (not the "UI" input)
-              $('#survey_business_hidden').val(relevantBusiness.id);
-              $('#survey_business').attr("value", name);
-            }
-        });
-
-    // Work with id instead of name of the business
-    
-    /**********************************************************************/
-
-
-    /******  LIVE SEARCH   ******/
-
-      $.ajax({
-        url:'',
-        type: "GET",
-        dataType: "json",
-        data: {
-            "some_var_name": "some_var_value"
+            /****************************/
         },
-        async: true,
-        success: function (data)
-            {
-                console.log(data)
-                $('div#ajax-results').html(data.output);
+        autoFocus: true,
+        delay: 100,
+        select: function( event, ui ) {
+
+             // $('#survey_business').attr("value", ui.item.value);
+
+              var name = ui.item.value;
+
+            // Do an AJAX request to a method we created, that returns the relevant businsess's Entity
+              $.ajax({
+                url: "/api/business/findbusiness",
+                type: "GET",
+                dataType: "json",
+                data: {
+                    name: name
+                },
+                async: true,
+                success: function (data) { 
+                    
+                    // set the value of the "hidden" input (not the "UI" input)
+                    $('#survey_business_hidden').val(data['business'][0].id);
+                }
+            });
+
             }
         });
 
-    /****************************/
+    /**********************************************************************/
 
 });
 
@@ -97,11 +93,9 @@ jQuery(document).ready(function() {
  * In this function we are trying to recreate the Question form
  * as soon as the user clicks on 'Add Question'
  * 
- * 
  * But as part of the process, we also need to recreate the 'Add an answer' functionality
  * 
  */
-
 function addQuestionForm($collectionHolder, $addQuestionDiv) {
 
     // Get the data-prototype explained earlier
@@ -147,10 +141,10 @@ function addQuestionForm($collectionHolder, $addQuestionDiv) {
 
 
     // add a delete link to the new form
-    $newFormLi.find('a.card-delete').each(function() {
-        addTagFormDeleteLink($(this));
+    $newFormLi.find('.card').each(function() {
+        addQuestionFormDeleteLink($(this));
     });
-    // addTagFormDeleteLink($newFormLi);
+    // addQuestionFormDeleteLink($newFormLi);
 
     // Add answer feature
     /******************************************************************************/
@@ -200,7 +194,7 @@ function addAnswerForm($collection, $addDiv) {
 }
 
 
-function addTagFormDeleteLink($formLi) {
+function addQuestionFormDeleteLink($formLi) {
     var $removeFormButton = $('<i class="flaticon-delete"></i>');
     $formLi.append($removeFormButton);
 

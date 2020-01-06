@@ -31,7 +31,7 @@ class Question
      * @ORM\Column(type="string", length=255)
      */
     private $answerType;
-
+ 
     /**
      * @ORM\Column(type="json", nullable=true)
      */
