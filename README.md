@@ -1,4 +1,4 @@
-# RestoSurvey App (Api + Admin Panel)
+# RestoSurvey App (API + Admin Panel)
 
 RestoSurvey is a survey-building application, similar to surveymonkey and limesurvey, but tailored for the needs of local restaurants and businesses.
 This project represents the backend of the application, including the API and the admin panel interface.
@@ -48,6 +48,7 @@ Also, in all of the controllers' methods, we are working with data sent from the
 ```
 $content = json_decode($request->getContent(), true);
 ```
+Most of the business logic is written in seperate files, more specifically, in [services](https://symfony.com/doc/4.3/service_container.html) defined inside 'src/Services'. This is to ensure reusability and keep our controllers 'thin'.
 
 The user login and registration is handled by [Symfony's powerful API token authentication](https://symfony.com/doc/4.3/security/guard_authentication.html).
 
@@ -55,6 +56,21 @@ The user login and registration is handled by [Symfony's powerful API token auth
 
 This part of the backend, as opposed to the API, has an interface! And it's defined in [TWIG templates](https://symfony.com/doc/4.3/templates.html), inside the '/templates' folder. The styling in these templates is provided by the customizable [Metronic theme](https://keenthemes.com/metronic/preview/demo7/index.html).
 
+![Screenshot of the Admin Panel](https://github.com/jawadf/survey_api/blob/master/assets/readme_images/admin-panel.png)
+
+There is only one controller for the admin panel and it's '/src/Controller/Web/AdminController.php'. It is organized into 3 main sections: Survey Methods, User Methods and Business Methods. As the name shows, each section has a number of methods related to a specific entity in our application.
+
+The 2 most common components in this panel are datatables and forms. The styling for both is provided by Metronic. Forms are built using [Symfony forms](https://symfony.com/doc/4.3/forms.html), and all the form 'types' exist in the 'src/Form' folder.
+
+Note that some of the functionality of these forms, such as dynamically adding and removing fields to the form, is written on the front-end using jQuery, in the '/assets/js/add-collection-widget.js' file. The jQuery code here and the idea behind it are a bit complicated, but clear comments have been provided and related information can be found on Symfony's documentation: ["Allowing new tags with the prototype"](https://symfony.com/doc/4.3/form/form_collections.html#allowing-new-tags-with-the-prototype) and ["Symfony's Collection Type"](https://symfony.com/doc/4.3/reference/forms/types/collection.html).
+
+As for the admin login functionality, we are using [Symfony's powerful security system](https://symfony.com/doc/4.3/security.html), the its related secure [login form](https://symfony.com/doc/4.3/security/form_login_setup.html).
+
 ## Usage
 
-Installation is the next section in an effective README. Tell other users how to install your project locally. Optionally, include a gif to make the process even more clear for other people.
+### The Admin Panel
+
+The general purpose of the app is to create surveys, but in the process you'll be creating business/company profiles, adding users (managers or employees) to these companies, with the ability to edit or delete what you've created.
+
+There is a clear and straightforward navigation on the top of the panel: 
+![Screenshot of the Navigation](https://github.com/jawadf/survey_api/blob/master/assets/readme_images/admin-panel.png)
