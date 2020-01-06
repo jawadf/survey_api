@@ -64,6 +64,8 @@ The 2 most common components in this panel are datatables and forms. The styling
 
 Note that some of the functionality of these forms, such as dynamically adding and removing fields to the form, is written on the front-end using jQuery, in the '/assets/js/add-collection-widget.js' file. The jQuery code here and the idea behind it are a bit complicated, but clear comments have been provided and related information can be found on Symfony's documentation: ["Allowing new tags with the prototype"](https://symfony.com/doc/4.3/form/form_collections.html#allowing-new-tags-with-the-prototype) and ["Symfony's Collection Type"](https://symfony.com/doc/4.3/reference/forms/types/collection.html).
 
+As for the admin login functionality, we are using [Symfony's powerful security system](https://symfony.com/doc/4.3/security.html), the its related secure [login form](https://symfony.com/doc/4.3/security/form_login_setup.html).
+
 ## Usage
 
 Installation is the next section in an effective README. Tell other users how to install your project locally. Optionally, include a gif to make the process even more clear for other people.
