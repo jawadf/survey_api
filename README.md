@@ -1,0 +1,60 @@
+# RestoSurvey App (Api + Admin Panel)
+
+RestoSurvey is a survey-building application, similar to surveymonkey and limesurvey, but tailored for the needs of local restaurants and businesses.
+This project represents the backend of the application, including the API and the admin panel interface.
+
+## Table Of Contents
+
+1. [Installation](#Installation)
+2. [General Structure](#general-structure)
+3. [Usage](#usage)
+
+## Installation
+
+This project is built with Symfony 4.3, so you'll need to have all the prerequisites installed on your computer. Fortunately, Symfony has a very clear and detailed documentation on this topic (and all relevant topics really). Following [this link](https://symfony.com/doc/4.3/setup.html) you can find all the information on installing and setting up Symfony 4.3 on your computer.
+
+Pay special attention to [this section](https://symfony.com/doc/current/setup.html#setting-up-an-existing-symfony-project), where they guide you on how to set up an existing Symfony project, like in our case.
+
+
+After installing all the requirements, you are now ready to edit the project with a code editor. Run this command to have it running on localhost:8000
+
+```
+php bin/console server:start
+```
+*P.S.: Working on this app requires a good knowledge of the Symfony framework mainly, coupled with some other technologies such as jQuery and SQL. If you are not familiar with Symfony, you can check out the official documentation [here](https://symfony.com/doc/4.3/page_creation.html).*
+
+## General Structure
+
+This app has two main divisions: The API and the admin panel. They are clearly seperated in the 'src/Controller' folder, into 2 folders called 'Rest' and 'Web'. 'Rest' contains the controllers for the API, which is built using Symfony's FOSRestBundle; and the 'Web' folder contains the controller for the Admin Panel.
+
+The configuration for these 2 folders can be found in the 'config/routes/annotations.yaml' file.
+
+```
+web_controller:
+    resource: ../../src/Controller/Web/
+    type: annotation
+
+
+rest_controller:
+    resource: ../../src/Controller/Rest/
+    type: annotation
+```
+
+### The API
+
+The API is built using Symfony's FOSRestBundle: all the controllers in the 'Rest' folder follow the same pattern of [manual defintion of routes](https://symfony.com/doc/master/bundles/FOSRestBundle/7-manual-route-definition.html).
+
+Also, in all of the controllers' methods, we are working with data sent from the user in JSON format. Data is sent in the request's body, and we are using the following syntax to access them:
+```
+$content = json_decode($request->getContent(), true);
+```
+
+The user login and registration is handled by [Symfony's powerful API token authentication](https://symfony.com/doc/4.3/security/guard_authentication.html).
+
+### The Admin Panel
+
+This part of the backend, as opposed to the API, has an interface! And it's defined in [TWIG templates](https://symfony.com/doc/4.3/templates.html), inside the '/templates' folder. The styling in these templates is provided by the customizable [Metronic theme](https://keenthemes.com/metronic/preview/demo7/index.html).
+
+## Usage
+
+Installation is the next section in an effective README. Tell other users how to install your project locally. Optionally, include a gif to make the process even more clear for other people.
