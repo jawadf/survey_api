@@ -48,12 +48,21 @@ Also, in all of the controllers' methods, we are working with data sent from the
 ```
 $content = json_decode($request->getContent(), true);
 ```
+Most of the business logic is written in seperate files, more specifically, in [services](https://symfony.com/doc/4.3/service_container.html) defined inside 'src/Services'. This is to ensure reusability and keep our controllers 'thin'.
 
 The user login and registration is handled by [Symfony's powerful API token authentication](https://symfony.com/doc/4.3/security/guard_authentication.html).
 
 ### The Admin Panel
 
 This part of the backend, as opposed to the API, has an interface! And it's defined in [TWIG templates](https://symfony.com/doc/4.3/templates.html), inside the '/templates' folder. The styling in these templates is provided by the customizable [Metronic theme](https://keenthemes.com/metronic/preview/demo7/index.html).
+
+![Screenshot of the Admin Panel](https://github.com/jawadf/survey_api/blob/master/assets/readme_images/admin-panel.png)
+
+There is only one controller for the admin panel and it's '/src/Controller/Web/AdminController.php'. It is organized into 3 main sections: Survey Methods, User Methods and Business Methods. As the name shows, each section has a number of methods related to a specific entity in our application.
+
+The 2 most common components in this panel are datatables and forms. The styling for both is provided by Metronic. Forms are built using [Symfony forms](https://symfony.com/doc/4.3/forms.html), and all the form 'types' exist in the 'src/Form' folder.
+
+Note that some of the functionality of these forms, such as dynamically adding and removing fields to the form, is written on the front end using jQuery, in the '/assets/js' folder. The jQuery code here and the idea behind it are a bit complicated, but clear comments have been provided and related information can be found on Symfony's documentation: ["Allowing new tags with the prototype"](https://symfony.com/doc/4.3/form/form_collections.html#allowing-new-tags-with-the-prototype) and ["Symfony's Collection Type"](https://symfony.com/doc/4.3/reference/forms/types/collection.html)
 
 ## Usage
 
