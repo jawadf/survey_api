@@ -73,4 +73,4 @@ As for the admin login functionality, we are using [Symfony's powerful security 
 The general purpose of the app is to create surveys, but in the process you'll be creating business/company profiles, adding users (managers or employees) to these companies, with the ability to edit or delete what you've created.
 
 There is a clear and straightforward navigation on the top of the panel: 
-![Screenshot of the Navigation](https://github.com/jawadf/survey_api/blob/master/assets/readme_images/admin-panel.png)
+![Screenshot of the Navigation](https://github.com/jawadf/survey_api/blob/master/assets/readme_images/navigation.png)
