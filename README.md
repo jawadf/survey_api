@@ -1,4 +1,4 @@
-# RestoSurvey App (Api + Admin Panel)
+# RestoSurvey App (API + Admin Panel)
 
 RestoSurvey is a survey-building application, similar to surveymonkey and limesurvey, but tailored for the needs of local restaurants and businesses.
 This project represents the backend of the application, including the API and the admin panel interface.
