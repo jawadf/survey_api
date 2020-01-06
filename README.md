@@ -74,6 +74,8 @@ The general purpose of the app is to create surveys, but in the process you'll b
 
 In order to make use of this API, the client has to send requests to the relevant URL, with parameters in the request's body using JSON format. 
 
+For example, 
+
 ### The Admin Panel
 
 There is a clear and straightforward navigation on the top of the panel: 
