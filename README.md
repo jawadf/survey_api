@@ -62,7 +62,7 @@ There is only one controller for the admin panel and it's '/src/Controller/Web/A
 
 The 2 most common components in this panel are datatables and forms. The styling for both is provided by Metronic. Forms are built using [Symfony forms](https://symfony.com/doc/4.3/forms.html), and all the form 'types' exist in the 'src/Form' folder.
 
-Note that some of the functionality of these forms, such as dynamically adding and removing fields to the form, is written on the front end using jQuery, in the '/assets/js' folder. The jQuery code here and the idea behind it are a bit complicated, but clear comments have been provided and related information can be found on Symfony's documentation: ["Allowing new tags with the prototype"](https://symfony.com/doc/4.3/form/form_collections.html#allowing-new-tags-with-the-prototype) and ["Symfony's Collection Type"](https://symfony.com/doc/4.3/reference/forms/types/collection.html)
+Note that some of the functionality of these forms, such as dynamically adding and removing fields to the form, is written on the front-end using jQuery, in the '/assets/js/add-collection-widget.js' file. The jQuery code here and the idea behind it are a bit complicated, but clear comments have been provided and related information can be found on Symfony's documentation: ["Allowing new tags with the prototype"](https://symfony.com/doc/4.3/form/form_collections.html#allowing-new-tags-with-the-prototype) and ["Symfony's Collection Type"](https://symfony.com/doc/4.3/reference/forms/types/collection.html).
 
 ## Usage
 
