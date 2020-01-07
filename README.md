@@ -5,7 +5,7 @@ This project represents the backend of the application, including the API and th
 
 ## Table Of Contents
 
-1. [Installation](#Installation)
+1. [Installation](#installation)
 2. [General Structure](#general-structure)
 3. [Usage](#usage)
 
@@ -74,12 +74,25 @@ The general purpose of the app is to create surveys, but in the process you'll b
 
 In order to make use of this API, the client has to send requests to the relevant URL, with parameters in the request's body using JSON format. 
 
-For example, 
+Suppose you're running the project on localhost:8000, an example request to create a new survey would look something like this:
+```
+http://localhost:8000/api/survey/create
+```
+Along with a request body in JSON format:
+
+```
+{
+"name": "My New Survey",
+"description": "This is the description of the survey",
+"format": "one-question-per-screen",
+"user_id": 4
+}
+```
 
 ### The Admin Panel
 
 There is a clear and straightforward navigation on the top of the panel: 
 ![Screenshot of the Navigation](https://github.com/jawadf/survey_api/blob/master/assets/readme_images/navigation.png)
 
-In each section of the navigation, say for example the 'Survey' section, you can see a data list/table of all the existing surveys on the databse, which you can manage. In addition, you will find a button to create a new 'Survey'.
+In each section of the navigation, say for example the 'Survey' section, you can see a data list/table of all the existing surveys on the database, which you can manage. In addition, you will find a button to create a new 'Survey'.
 
